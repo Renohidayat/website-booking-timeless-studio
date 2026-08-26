@@ -1,0 +1,77 @@
+query ListPackages @auth(level: PUBLIC) {
+  packages {
+    id
+    nama_paket
+    kategori
+    harga_dasar
+    durasi_menit
+    maks_orang
+    deskripsi
+    isPopular
+  }
+}
+
+query GetPackage($id: UUID!) @auth(level: PUBLIC) {
+  package(id: $id) {
+    id
+    nama_paket
+    kategori
+    harga_dasar
+    durasi_menit
+    maks_orang
+    deskripsi
+    isPopular
+  }
+}
+
+query ListAdditionalServices @auth(level: PUBLIC) {
+  additionalServices {
+    id
+    nama_layanan
+    harga_satuan
+  }
+}
+
+query ListSchedules @auth(level: PUBLIC) {
+  schedules(orderBy: [{tanggal: ASC}, {jam_mulai: ASC}]) {
+    id
+    tanggal
+    jam_mulai
+    jam_selesai
+    status_slot
+  }
+}
+
+query GetSchedulesByDate($tanggal: String!) @auth(level: PUBLIC) {
+  schedules(where: {tanggal: {eq: $tanggal}}, orderBy: [{jam_mulai: ASC}]) {
+    id
+    tanggal
+    jam_mulai
+    jam_selesai
+    status_slot
+  }
+}
+
+query ListVouchers @auth(level: PUBLIC) {
+  vouchers {
+    id
+    kode_voucher
+    tipe_diskon
+    nilai_diskon
+    tgl_berlaku
+    tgl_berakhir
+    kuota
+  }
+}
+
+query CheckVoucher($kode: String!) @auth(level: PUBLIC) {
+  vouchers(where: {kode_voucher: {eq: $kode}}) {
+    id
+    kode_voucher
+    tipe_diskon
+    nilai_diskon
+    tgl_berlaku
+    tgl_berakhir
+    kuota
+  }
+}

@@ -1,0 +1,12 @@
+specVersion: "v1alpha"
+serviceId: "timeless-studio"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "timelessstudio"
+      cloudSql:
+        instanceId: "timeless-studio-sqldb"
+connectorDirs:
+  - "./connector"
