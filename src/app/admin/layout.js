@@ -16,6 +16,7 @@ export default function AdminLayout({ children }) {
             <Link href="/admin/packages" className="block px-4 py-2 rounded hover:bg-slate-800">Paket & Layanan</Link>
             <Link href="/admin/schedules" className="block px-4 py-2 rounded hover:bg-slate-800">Jadwal & Slot</Link>
             <Link href="/admin/vouchers" className="block px-4 py-2 rounded hover:bg-slate-800">Voucher Promo</Link>
+            <Link href="/admin/reports" className="block px-4 py-2 rounded hover:bg-slate-800">Laporan Transaksi</Link>
           </nav>
         </aside>
 
