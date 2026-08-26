@@ -24,6 +24,9 @@ export default function RootLayout({ children }) {
       lang="id"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+      </head>
       <body className="font-sans selection:bg-studio-900 selection:text-white flex flex-col min-h-screen">
         <AuthProvider>
           {children}

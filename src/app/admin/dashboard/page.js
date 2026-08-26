@@ -2,112 +2,65 @@ import Link from "next/link";
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Dashboard Admin</h1>
-          <p className="mt-2 text-sm text-gray-700">Selamat datang di panel kontrol Timeless Studio.</p>
-        </div>
+    <div className="space-y-8 max-w-6xl mx-auto">
+      <div>
+        <h1 className="text-3xl font-serif font-semibold text-studio-900 mb-2">Admin Dashboard</h1>
+        <p className="text-sm text-studio-500 uppercase tracking-widest">Overview & Control Panel</p>
       </div>
       
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Card 1 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Pemesanan Baru</dt>
-                  <dd className="flex items-baseline">
-                    <div className="text-2xl font-semibold text-gray-900">12</div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm hover:shadow-md transition">
+          <div className="flex justify-between items-start mb-4">
+             <div className="w-10 h-10 rounded bg-studio-100 flex items-center justify-center text-studio-900">
+                <i className="fa-solid fa-calendar-check"></i>
+             </div>
+             <span className="text-2xl font-serif font-semibold text-studio-900">12</span>
           </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link href="/admin/bookings" className="font-medium text-indigo-700 hover:text-indigo-900">
-                Lihat semua pemesanan
-              </Link>
-            </div>
-          </div>
+          <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">New Bookings</h3>
+          <Link href="/admin/bookings" className="text-xs font-semibold text-studio-900 hover:underline">View details &rarr;</Link>
         </div>
 
         {/* Card 2 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Jadwal Hari Ini</dt>
-                  <dd className="flex items-baseline">
-                    <div className="text-2xl font-semibold text-gray-900">5</div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm hover:shadow-md transition">
+          <div className="flex justify-between items-start mb-4">
+             <div className="w-10 h-10 rounded bg-studio-100 flex items-center justify-center text-studio-900">
+                <i className="fa-solid fa-clock"></i>
+             </div>
+             <span className="text-2xl font-serif font-semibold text-studio-900">5</span>
           </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link href="/admin/schedules" className="font-medium text-indigo-700 hover:text-indigo-900">
-                Kelola jadwal
-              </Link>
-            </div>
-          </div>
+          <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">Today's Schedule</h3>
+          <Link href="/admin/schedules" className="text-xs font-semibold text-studio-900 hover:underline">Manage schedule &rarr;</Link>
         </div>
 
         {/* Card 3 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Laporan Pendapatan</dt>
-                  <dd className="flex items-baseline">
-                    <div className="text-lg font-semibold text-gray-900">Rp 6.750.000</div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
+        <div className="bg-studio-900 border border-studio-900 p-6 rounded-sm shadow-sm hover:shadow-lg transition">
+          <div className="flex justify-between items-start mb-4">
+             <div className="w-10 h-10 rounded bg-white/10 flex items-center justify-center text-white">
+                <i className="fa-solid fa-chart-line"></i>
+             </div>
+             <span className="text-2xl font-serif font-semibold text-white">Rp 6.75M</span>
           </div>
-          <div className="bg-gray-50 px-5 py-3">
-            <div className="text-sm">
-              <Link href="/admin/reports" className="font-medium text-indigo-700 hover:text-indigo-900">
-                Lihat laporan lengkap
-              </Link>
-            </div>
-          </div>
+          <h3 className="text-sm font-medium text-studio-400 uppercase tracking-wider mb-1">Revenue</h3>
+          <Link href="/admin/reports" className="text-xs font-semibold text-white hover:underline">View full report &rarr;</Link>
         </div>
       </div>
       
       {/* Quick Actions */}
-      <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Aksi Cepat</h2>
+      <div className="pt-8 border-t border-studio-200">
+        <h2 className="text-lg font-serif font-semibold text-studio-900 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Link href="/admin/packages" className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <span className="mt-2 block text-sm font-medium text-gray-900">Tambah Paket</span>
+          <Link href="/admin/packages" className="block w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+            <i className="fa-solid fa-box text-xl text-studio-400 group-hover:text-studio-900 mb-3 block transition"></i>
+            <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Add Package</span>
           </Link>
-          <Link href="/admin/schedules" className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <span className="mt-2 block text-sm font-medium text-gray-900">Atur Jadwal Baru</span>
+          <Link href="/admin/schedules" className="block w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+            <i className="fa-solid fa-calendar-plus text-xl text-studio-400 group-hover:text-studio-900 mb-3 block transition"></i>
+            <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Set Schedule</span>
           </Link>
-          <Link href="/admin/vouchers" className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <span className="mt-2 block text-sm font-medium text-gray-900">Buat Voucher</span>
+          <Link href="/admin/vouchers" className="block w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+            <i className="fa-solid fa-ticket text-xl text-studio-400 group-hover:text-studio-900 mb-3 block transition"></i>
+            <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Create Voucher</span>
           </Link>
         </div>
       </div>

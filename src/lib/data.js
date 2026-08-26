@@ -4,32 +4,46 @@
 export const dummyPackages = [
   {
     id_paket: 1,
-    nama_paket: "Paket Self Photo Basic",
-    harga_dasar: 100000,
-    durasi_menit: 15,
+    nama_paket: "Package A",
+    kategori: "Intimate / Duos",
+    harga_dasar: 30000,
+    durasi_menit: 10,
     maks_orang: 2,
-    deskripsi: "Sesi foto mandiri selama 15 menit dengan maksimal 2 orang. Dapat semua soft file.",
+    deskripsi: "10 Mins Unlimited Shots, 1x Physical Print (4R), All Color-graded Soft Files",
+    isPopular: false
   },
   {
     id_paket: 2,
-    nama_paket: "Paket Self Photo Group",
-    harga_dasar: 150000,
-    durasi_menit: 20,
-    maks_orang: 5,
-    deskripsi: "Sesi foto seru bareng teman maksimal 5 orang selama 20 menit.",
+    nama_paket: "Package B",
+    kategori: "Group / Family",
+    harga_dasar: 50000,
+    durasi_menit: 15,
+    maks_orang: 4,
+    deskripsi: "15 Mins Unlimited Shots, 2x Physical Prints (4R), All Color-graded Soft Files",
+    isPopular: true
+  },
+  {
+    id_paket: 3,
+    nama_paket: "ID Photo",
+    kategori: "Formal / ID",
+    harga_dasar: 35000,
+    durasi_menit: 10,
+    maks_orang: 1,
+    deskripsi: "Max 5 Best Shots, Prints (2x3, 3x4, 4x6), Retouched Soft File",
+    isPopular: false
   },
 ];
 
 export const dummyAdditionalServices = [
   {
     id_layanan: 1,
-    nama_layanan: "Tambah Orang",
-    harga_satuan: 20000,
+    nama_layanan: "Extra Person",
+    harga_satuan: 10000,
   },
   {
     id_layanan: 2,
-    nama_layanan: "Cetak Foto 4R",
-    harga_satuan: 15000,
+    nama_layanan: "Extra 4R Print",
+    harga_satuan: 5000,
   },
 ];
 
