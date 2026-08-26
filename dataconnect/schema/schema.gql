@@ -1,41 +1,41 @@
 type Package @table {
   id: UUID! @default(expr: "uuidV4()")
-  nama_paket: String!
+  namaPaket: String!
   kategori: String!
-  harga_dasar: Int!
-  durasi_menit: Int!
-  maks_orang: Int!
+  hargaDasar: Int!
+  durasiMenit: Int!
+  maksOrang: Int!
   deskripsi: String!
   isPopular: Boolean! @default(value: false)
 }
 
 type AdditionalService @table {
   id: UUID! @default(expr: "uuidV4()")
-  nama_layanan: String!
-  harga_satuan: Int!
+  namaLayanan: String!
+  hargaSatuan: Int!
 }
 
 type Schedule @table {
   id: UUID! @default(expr: "uuidV4()")
   tanggal: String!
-  jam_mulai: String!
-  jam_selesai: String!
-  status_slot: String! @default(value: "tersedia")
+  jamMulai: String!
+  jamSelesai: String!
+  statusSlot: String! @default(value: "tersedia")
 }
 
 type Voucher @table {
   id: UUID! @default(expr: "uuidV4()")
-  kode_voucher: String!
-  tipe_diskon: String!
-  nilai_diskon: Int!
-  tgl_berlaku: String!
-  tgl_berakhir: String!
+  kodeVoucher: String!
+  tipeDiskon: String!
+  nilaiDiskon: Int!
+  tglBerlaku: String!
+  tglBerakhir: String!
   kuota: Int!
 }
 
 type Booking @table {
   id: UUID! @default(expr: "uuidV4()")
-  kode_booking: String!
+  kodeBooking: String!
   userId: String!
   packageId: UUID!
   scheduleId: UUID!

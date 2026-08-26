@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { getPackages, getAdditionalServices, getSchedules, checkVoucher } from "@/lib/data";
+import { getPackages, getAdditionalServices, getSchedules, checkVoucherKode } from "@/lib/data";
 import { useAuth } from "@/lib/auth-context";
 import Navbar from "@/components/Navbar";
 
@@ -87,7 +87,7 @@ function BookingFlow() {
 
   const handleApplyVoucher = async () => {
     setVoucherError("");
-    const v = await checkVoucher(voucherCode);
+    const v = await checkVoucherKode(voucherCode);
     if (v) {
       setAppliedVoucher(v);
     } else {

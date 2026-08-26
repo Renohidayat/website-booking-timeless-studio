@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition, useState } from "react";
-import { deleteSchedule, createSchedule, updateSchedule } from "@/app/admin/actions";
+import { deleteScheduleAction, createScheduleAction, updateScheduleAction } from "@/app/admin/actions";
 
 export function ActionButtons({ id, entityName }) {
   const [isPending, startTransition] = useTransition();
@@ -11,7 +11,7 @@ export function ActionButtons({ id, entityName }) {
     const newStatus = window.prompt(`Update status untuk ${entityName} ID ${id} (tersedia/dipesan/tidak_tersedia):`);
     if (newStatus && ["tersedia", "dipesan", "tidak_tersedia"].includes(newStatus)) {
       startTransition(() => {
-        updateSchedule(id, { status_slot: newStatus });
+        updateScheduleAction(id, { status_slot: newStatus });
       });
     } else if (newStatus) {
       alert("Status tidak valid!");
@@ -22,7 +22,7 @@ export function ActionButtons({ id, entityName }) {
     const confirm = window.confirm(`Apakah Anda yakin ingin menghapus ${entityName} ini?`);
     if (confirm) {
       startTransition(() => {
-        deleteSchedule(id);
+        deleteScheduleAction(id);
       });
     }
   };
@@ -50,7 +50,7 @@ export function CreateButton({ label, entityName }) {
     };
 
     startTransition(() => {
-      createSchedule(data);
+      createScheduleAction(data);
       setIsOpen(false);
     });
   };

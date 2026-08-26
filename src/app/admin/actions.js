@@ -1,32 +1,28 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { dummySchedules } from "@/lib/data";
+import { createSchedule, updateScheduleStatus, deleteSchedule } from "@/lib/dataconnect-sdk";
+import { dataConnect } from "@/lib/data-connect";
 
-export async function deleteSchedule(id) {
-  const index = dummySchedules.findIndex((s) => s.id_jadwal === id);
-  if (index !== -1) {
-    dummySchedules.splice(index, 1);
-  }
+export async function deleteScheduleAction(id) {
+  await deleteSchedule(dataConnect, { id });
   revalidatePath("/admin/schedules");
 }
 
-export async function createSchedule(data) {
-  const newId = dummySchedules.length > 0 ? Math.max(...dummySchedules.map(s => s.id_jadwal)) + 1 : 1;
-  dummySchedules.push({
-    id_jadwal: newId,
+export async function createScheduleAction(data) {
+  await createSchedule(dataConnect, {
     tanggal: data.tanggal,
-    jam_mulai: data.jam_mulai,
-    jam_selesai: data.jam_selesai,
-    status_slot: data.status_slot || "tersedia"
+    jamMulai: data.jam_mulai,
+    jamSelesai: data.jam_selesai,
+    statusSlot: data.status_slot || "tersedia"
   });
   revalidatePath("/admin/schedules");
 }
 
-export async function updateSchedule(id, data) {
-  const index = dummySchedules.findIndex((s) => s.id_jadwal === id);
-  if (index !== -1) {
-    dummySchedules[index] = { ...dummySchedules[index], ...data };
-  }
+export async function updateScheduleAction(id, data) {
+  await updateScheduleStatus(dataConnect, {
+    id: id,
+    statusSlot: data.status_slot
+  });
   revalidatePath("/admin/schedules");
 }

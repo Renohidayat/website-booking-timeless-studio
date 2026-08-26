@@ -1,18 +1,18 @@
 mutation CreatePackage(
-  $nama_paket: String!
+  $namaPaket: String!
   $kategori: String!
-  $harga_dasar: Int!
-  $durasi_menit: Int!
-  $maks_orang: Int!
+  $hargaDasar: Int!
+  $durasiMenit: Int!
+  $maksOrang: Int!
   $deskripsi: String!
   $isPopular: Boolean!
 ) @auth(level: USER) {
   package_insert(data: {
-    nama_paket: $nama_paket
+    namaPaket: $namaPaket
     kategori: $kategori
-    harga_dasar: $harga_dasar
-    durasi_menit: $durasi_menit
-    maks_orang: $maks_orang
+    hargaDasar: $hargaDasar
+    durasiMenit: $durasiMenit
+    maksOrang: $maksOrang
     deskripsi: $deskripsi
     isPopular: $isPopular
   })
@@ -20,25 +20,25 @@ mutation CreatePackage(
 
 mutation CreateSchedule(
   $tanggal: String!
-  $jam_mulai: String!
-  $jam_selesai: String!
-  $status_slot: String!
+  $jamMulai: String!
+  $jamSelesai: String!
+  $statusSlot: String!
 ) @auth(level: USER) {
   schedule_insert(data: {
     tanggal: $tanggal
-    jam_mulai: $jam_mulai
-    jam_selesai: $jam_selesai
-    status_slot: $status_slot
+    jamMulai: $jamMulai
+    jamSelesai: $jamSelesai
+    statusSlot: $statusSlot
   })
 }
 
 mutation UpdateScheduleStatus(
   $id: UUID!
-  $status_slot: String!
+  $statusSlot: String!
 ) @auth(level: USER) {
   schedule_update(
     id: $id
-    data: { status_slot: $status_slot }
+    data: { statusSlot: $statusSlot }
   )
 }
 
@@ -47,14 +47,14 @@ mutation DeleteSchedule($id: UUID!) @auth(level: USER) {
 }
 
 mutation CreateBooking(
-  $kode_booking: String!
+  $kodeBooking: String!
   $userId: String!
   $packageId: UUID!
   $scheduleId: UUID!
   $totalHarga: Int!
 ) @auth(level: USER) {
   booking_insert(data: {
-    kode_booking: $kode_booking
+    kodeBooking: $kodeBooking
     userId: $userId
     packageId: $packageId
     scheduleId: $scheduleId

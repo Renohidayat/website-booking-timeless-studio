@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 // We will import SDK dynamically since it might not be generated yet during this step
-import { dummyPackages, dummySchedules, dummyAdditionalServices } from "@/lib/data";
+import { dummyPackages, dummySchedules } from "@/lib/data";
 
 export async function GET() {
   try {
@@ -13,11 +13,11 @@ export async function GET() {
     // Seed Packages
     for (const pkg of dummyPackages) {
       await createPackage(dataConnect, {
-        nama_paket: pkg.nama_paket,
+        namaPaket: pkg.nama_paket,
         kategori: pkg.kategori,
-        harga_dasar: pkg.harga_dasar,
-        durasi_menit: pkg.durasi_menit,
-        maks_orang: pkg.maks_orang,
+        hargaDasar: pkg.harga_dasar,
+        durasiMenit: pkg.durasi_menit,
+        maksOrang: pkg.maks_orang,
         deskripsi: pkg.deskripsi,
         isPopular: pkg.isPopular || false
       });
@@ -28,9 +28,9 @@ export async function GET() {
     for (const sched of dummySchedules) {
       await createSchedule(dataConnect, {
         tanggal: sched.tanggal,
-        jam_mulai: sched.jam_mulai,
-        jam_selesai: sched.jam_selesai,
-        status_slot: sched.status_slot
+        jamMulai: sched.jam_mulai,
+        jamSelesai: sched.jam_selesai,
+        statusSlot: sched.status_slot
       });
       count++;
     }
