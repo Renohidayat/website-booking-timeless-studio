@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({ nama: "", email: "", password: "", no_telepon: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -21,28 +22,48 @@ export default function RegisterPage() {
       // 1. Create Firebase Auth User
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       
-      // 2. Set Custom Claim 'pelanggan'
+      // 2. Set Custom Claim 'pelanggan' (opsional jika belum ada service account)
       const token = await userCredential.user.getIdToken();
-      const res = await fetch("/api/auth/set-role", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: token, role: "pelanggan" })
-      });
-      if (!res.ok) throw new Error("Gagal mengatur role pengguna.");
+      try {
+        await fetch("/api/auth/set-role", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: token, role: "pelanggan" })
+        });
+      } catch (e) {
+        console.warn("Gagal set custom claim, fallback ke default pelanggan.");
+      }
       
-      // Force token refresh to get new claims
-      await userCredential.user.getIdToken(true);
-
-      // ponytail: Data Connect user record would be inserted here via GraphQL mutation
-      // For now, auth is working. Data Connect integration can be added when DB is live.
-
-      router.push("/");
+      // 3. Kirim Email Verifikasi
+      await sendEmailVerification(userCredential.user);
+      
+      setSuccess(true);
+      // Logout user sementara mereka belum verifikasi email (opsional, tapi disarankan)
+      await auth.signOut();
+      
     } catch (err) {
       setError(err.message || "Gagal melakukan registrasi.");
     } finally {
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+        <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-xl text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Pendaftaran Berhasil!</h2>
+          <div className="rounded-md bg-green-50 p-4 text-sm text-green-700">
+            Tautan verifikasi telah dikirim ke email <strong>{formData.email}</strong>.
+            Silakan cek kotak masuk (atau folder spam) Anda untuk memverifikasi akun sebelum login.
+          </div>
+          <Link href="/login" className="inline-block mt-4 rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+            Ke Halaman Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">

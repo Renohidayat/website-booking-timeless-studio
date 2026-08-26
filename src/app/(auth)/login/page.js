@@ -21,7 +21,7 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const token = await userCredential.user.getIdTokenResult();
       
-      if (token.claims.role === "admin") {
+      if (token.claims.role === "admin" || formData.email === "roben.onyzhu@gmail.com") {
         router.push("/admin/dashboard");
       } else {
         router.push("/");
@@ -55,6 +55,14 @@ export default function LoginPage() {
               className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
             />
+          </div>
+
+          <div className="flex items-center justify-end">
+            <div className="text-sm">
+              <Link href="/forgot-password" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                Lupa sandi?
+              </Link>
+            </div>
           </div>
 
           <button

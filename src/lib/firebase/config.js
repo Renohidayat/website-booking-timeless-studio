@@ -22,10 +22,11 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 
 // Untuk Firebase Data Connect
-// Pastikan region dan connector sesuai dengan konfigurasi dataconnect nantinya
-export const dataConnect = getDataConnect(app, {
-  location: process.env.NEXT_PUBLIC_DATACONNECT_LOCATION || "us-central1",
-  connector: process.env.NEXT_PUBLIC_DATACONNECT_CONNECTOR || "default",
-});
+// Pastikan region dan service/connector sesuai dengan konfigurasi dataconnect nantinya
+// export const dataConnect = getDataConnect(app, {
+//   service: process.env.NEXT_PUBLIC_DATACONNECT_SERVICE || "my-service",
+//   location: process.env.NEXT_PUBLIC_DATACONNECT_LOCATION || "us-central1",
+//   connector: process.env.NEXT_PUBLIC_DATACONNECT_CONNECTOR || "default",
+// });
 
 export default app;
