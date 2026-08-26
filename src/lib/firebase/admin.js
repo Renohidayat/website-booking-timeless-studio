@@ -1,18 +1,25 @@
-import admin from "firebase-admin";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
-if (!admin.apps.length) {
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+};
+
+if (!getApps().length) {
   try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        // Replace escaped newlines from env var
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      }),
-    });
+    if (serviceAccount.projectId && serviceAccount.clientEmail && serviceAccount.privateKey) {
+      initializeApp({
+        credential: cert(serviceAccount),
+      });
+    } else {
+      // Fallback for build phase or when env vars are missing
+      initializeApp();
+    }
   } catch (error) {
     console.error("Firebase admin initialization error", error.stack);
   }
 }
 
-export const adminAuth = admin.auth();
+export const adminAuth = getAuth();
