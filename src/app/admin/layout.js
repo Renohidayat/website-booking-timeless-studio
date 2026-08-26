@@ -13,7 +13,8 @@ export default function AdminLayout({ children }) {
           <nav className="flex-1 px-4 space-y-2">
             <Link href="/admin/dashboard" className="block px-4 py-2 rounded hover:bg-slate-800">Dashboard</Link>
             <Link href="/admin/packages" className="block px-4 py-2 rounded hover:bg-slate-800">Paket & Layanan</Link>
-            {/* Navigasi lain akan ditambahkan sesuai issue berikutnya */}
+            <Link href="/admin/schedules" className="block px-4 py-2 rounded hover:bg-slate-800">Jadwal & Slot</Link>
+            <Link href="/admin/vouchers" className="block px-4 py-2 rounded hover:bg-slate-800">Voucher Promo</Link>
           </nav>
         </aside>
 
