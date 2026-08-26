@@ -1,17 +1,9 @@
-# AGENTS.md — Timeless Studio Booking App
+<!-- BEGIN:nextjs-agent-rules -->
 
-## Stack
-- Next.js (App Router), JavaScript murni — no TypeScript
-- Firebase: Auth, SQL Connect (PostgreSQL), Storage, Hosting
-- Tailwind CSS
+# This is NOT the Next.js you know
 
-## Git Workflow (wajib tiap task)
-1. Pastikan ada GitHub Issue (buat kalau belum ada)
-2. Branch dari `develop`: feature/<no-issue>-<slug>
-3. Conventional Commits
-4. Push -> Pull Request ke `develop`, deskripsi lengkap, "Closes #<no>"
-5. `main` hanya menerima merge dari `develop`
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-## Batasan
-- Jangan menambah fitur di luar FR-01..FR-28 tanpa konfirmasi
-- Pembayaran tetap simulasi kecuali diminta ubah
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

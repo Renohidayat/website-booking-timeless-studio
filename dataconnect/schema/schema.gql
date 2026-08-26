@@ -1,0 +1,82 @@
+type users @table {
+  id_user: Int! @col(name: "id_user") @default(expr: "autoincrement()")
+  nama: String! @col(dataType: "varchar(100)")
+  email: String! @col(dataType: "varchar(100)") @unique
+  password: String! @col(dataType: "varchar(255)")
+  no_telepon: String! @col(dataType: "varchar(20)")
+  role: String! # ENUM: 'pelanggan', 'admin'
+  created_at: Timestamp! @default(expr: "now()")
+}
+
+type packages @table {
+  id_paket: Int! @col(name: "id_paket") @default(expr: "autoincrement()")
+  nama_paket: String! @col(dataType: "varchar(50)")
+  harga_dasar: Float! # DECIMAL(10,2) mapped to Float
+  durasi_menit: Int!
+  maks_orang: Int!
+  deskripsi: String!
+}
+
+type schedules @table {
+  id_jadwal: Int! @col(name: "id_jadwal") @default(expr: "autoincrement()")
+  tanggal: Date!
+  jam_mulai: String! # TIME type
+  jam_selesai: String! # TIME type
+  status_slot: String! # ENUM: 'tersedia', 'dipesan', 'tidak_tersedia'
+}
+
+type vouchers @table {
+  id_voucher: Int! @col(name: "id_voucher") @default(expr: "autoincrement()")
+  kode_voucher: String! @col(dataType: "varchar(50)") @unique
+  tipe_diskon: String! # ENUM: 'persen', 'nominal'
+  nilai_diskon: Float! # DECIMAL(10,2)
+  tgl_berlaku: Date!
+  tgl_berakhir: Date!
+  kuota: Int!
+}
+
+type additional_services @table {
+  id_layanan: Int! @col(name: "id_layanan") @default(expr: "autoincrement()")
+  nama_layanan: String! @col(dataType: "varchar(100)")
+  harga_satuan: Float! # DECIMAL(10,2)
+}
+
+type bookings @table {
+  id_booking: Int! @col(name: "id_booking") @default(expr: "autoincrement()")
+  kode_booking: String! @col(dataType: "varchar(30)") @unique
+  id_user: users! @ref
+  id_paket: packages! @ref
+  id_jadwal: schedules! @ref @unique # 1 slot cuma untuk 1 booking terkonfirmasi
+  id_voucher: vouchers @ref # Nullable
+  tgl_booking: Timestamp!
+  total_bayar: Float!
+  status_booking: String! # ENUM: 'menunggu_pembayaran', 'menunggu_verifikasi', 'terkonfirmasi', 'selesai', 'dibatalkan'
+  catatan: String
+}
+
+type booking_details @table {
+  id_detail: Int! @col(name: "id_detail") @default(expr: "autoincrement()")
+  id_booking: bookings! @ref
+  id_layanan: additional_services! @ref
+  jumlah: Int!
+  subtotal: Float!
+}
+
+type payments @table {
+  id_pembayaran: Int! @col(name: "id_pembayaran") @default(expr: "autoincrement()")
+  id_booking: bookings! @ref @unique
+  tgl_bayar: Timestamp!
+  metode_pembayaran: String! @col(dataType: "varchar(50)")
+  bukti_transfer: String! @col(dataType: "varchar(255)")
+  status_verifikasi: String! # ENUM: 'menunggu', 'valid', 'ditolak'
+  catatan_admin: String
+}
+
+type photo_prints @table {
+  id_cetak: Int! @col(name: "id_cetak") @default(expr: "autoincrement()")
+  id_booking: bookings! @ref @unique
+  ukuran_cetak: String! @col(dataType: "varchar(20)")
+  jumlah_lembar: Int!
+  link_google_drive: String @col(dataType: "varchar(255)") # Nullable
+  status_cetak: String! # ENUM: 'proses_editing', 'sedang_dicetak', 'siap_diambil', 'selesai'
+}
