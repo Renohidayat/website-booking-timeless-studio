@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,44 +35,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-xl">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">Login</h2>
-          <p className="mt-2 text-sm text-gray-600">Masuk ke akun Anda</p>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">{error}</div>}
-          
-          <div className="space-y-4 rounded-md shadow-sm">
-            <input
-              type="email" required placeholder="Email address"
-              className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
-            />
-            <input
-              type="password" required placeholder="Password"
-              className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
-            />
+    <>
+      <Navbar />
+      <div className="flex min-h-[calc(100vh-72px)] items-center justify-center bg-studio-50 p-4">
+        <div className="w-full max-w-md space-y-8 bg-white p-10 border border-studio-200 rounded-sm shadow-sm">
+          <div className="text-center">
+            <h2 className="text-3xl font-serif font-semibold tracking-tight text-studio-900">Welcome Back</h2>
+            <p className="mt-2 text-sm text-studio-500 uppercase tracking-widest">Sign in to your account</p>
           </div>
 
-          <button
-            type="submit" disabled={loading}
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
-          >
-            {loading ? "Memproses..." : "Masuk"}
-          </button>
-        </form>
-        
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Belum punya akun?{" "}
-          <Link href="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-            Daftar di sini
-          </Link>
-        </p>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            {error && <div className="rounded-sm bg-red-50 p-4 text-sm text-red-700 border border-red-100">{error}</div>}
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-studio-500 uppercase tracking-wider mb-2">Email Address</label>
+                <input
+                  type="email" required placeholder="Enter your email"
+                  className="block w-full rounded-sm border-0 py-3 px-4 text-studio-900 ring-1 ring-inset ring-studio-200 focus:ring-1 focus:ring-studio-900 sm:text-sm"
+                  value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
+                />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-medium text-studio-500 uppercase tracking-wider">Password</label>
+                  <Link href="/forgot-password" className="text-xs font-semibold text-studio-900 hover:underline">Forgot password?</Link>
+                </div>
+                <input
+                  type="password" required placeholder="Enter your password"
+                  className="block w-full rounded-sm border-0 py-3 px-4 text-studio-900 ring-1 ring-inset ring-studio-200 focus:ring-1 focus:ring-studio-900 sm:text-sm"
+                  value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit" disabled={loading}
+              className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide uppercase disabled:opacity-50"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+          
+          <p className="mt-10 text-center text-sm text-studio-600">
+            Don't have an account?{" "}
+            <Link href="/register" className="font-semibold text-studio-900 hover:underline">
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
