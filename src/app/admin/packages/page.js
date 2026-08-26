@@ -34,11 +34,11 @@ export default async function AdminPackagesPage() {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {packages.map((pkg) => (
-                      <tr key={pkg.id_paket}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{pkg.nama_paket}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {pkg.harga_dasar.toLocaleString('id-ID')}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.durasi_menit}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.maks_orang}</td>
+                      <tr key={pkg.id}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{pkg.namaPaket}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {pkg.hargaDasar.toLocaleString('id-ID')}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.durasiMenit}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.maksOrang}</td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
                         </td>
@@ -75,9 +75,9 @@ export default async function AdminPackagesPage() {
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {services.map((svc) => (
-                  <tr key={svc.id_layanan}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{svc.nama_layanan}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {svc.harga_satuan.toLocaleString('id-ID')}</td>
+                  <tr key={svc.id}>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{svc.namaLayanan}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {svc.hargaSatuan.toLocaleString('id-ID')}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
                     </td>

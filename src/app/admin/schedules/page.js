@@ -30,21 +30,21 @@ export default async function AdminSchedulesPage() {
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
               {schedules.map((s) => (
-                <tr key={s.id_jadwal}>
+                <tr key={s.id}>
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{s.tanggal}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{s.jam_mulai}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{s.jam_selesai}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{s.jamMulai}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{s.jamSelesai}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm">
                     <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                      s.status_slot === 'tersedia' ? 'bg-green-50 text-green-700 ring-green-600/20' :
-                      s.status_slot === 'dipesan' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20' :
+                      s.statusSlot === 'tersedia' ? 'bg-green-50 text-green-700 ring-green-600/20' :
+                      s.statusSlot === 'dipesan' ? 'bg-yellow-50 text-yellow-800 ring-yellow-600/20' :
                       'bg-red-50 text-red-700 ring-red-600/10'
                     }`}>
-                      {s.status_slot}
+                      {s.statusSlot}
                     </span>
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <ActionButtons id={s.id_jadwal} entityName="Jadwal" />
+                    <ActionButtons id={s.id} entityName="Jadwal" />
                   </td>
                 </tr>
               ))}

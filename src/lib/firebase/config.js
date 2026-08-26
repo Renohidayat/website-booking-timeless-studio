@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDataConnect } from "firebase/data-connect";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Placeholder untuk konfigurasi Firebase
@@ -20,13 +20,6 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 // Inisialisasi layanan yang akan digunakan
 export const auth = getAuth(app);
 export const storage = getStorage(app);
-
-// Untuk Firebase Data Connect
-// Pastikan region dan service/connector sesuai dengan konfigurasi dataconnect nantinya
-// export const dataConnect = getDataConnect(app, {
-//   service: process.env.NEXT_PUBLIC_DATACONNECT_SERVICE || "my-service",
-//   location: process.env.NEXT_PUBLIC_DATACONNECT_LOCATION || "us-central1",
-//   connector: process.env.NEXT_PUBLIC_DATACONNECT_CONNECTOR || "default",
-// });
+export const db = getFirestore(app);
 
 export default app;

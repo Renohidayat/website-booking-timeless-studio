@@ -1,5 +1,0 @@
-connectorId: "timeless-studio-connector"
-generate:
-  javascriptSdk:
-    outputDir: "../../src/lib/dataconnect-sdk"
-    package: "@timeless-studio/dataconnect"

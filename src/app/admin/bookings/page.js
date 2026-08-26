@@ -1,10 +1,7 @@
-export default function AdminBookingsPage() {
-  const mockBookings = [
-    { id: 1, kode: "BKG-123456", pelanggan: "Reno Hidayat", paket: "Self Photo Basic", tanggal: "2026-09-01", status: "menunggu_pembayaran", total: 100000 },
-    { id: 2, kode: "BKG-987654", pelanggan: "Asep", paket: "Self Photo Group", tanggal: "2026-09-01", status: "dibayar", total: 150000 },
-  ];
+import { getBookings } from "@/lib/data";
 
-  return (
+export default async function AdminBookingsPage() {
+  const bookings = await getBookings();  return (
     <div className="space-y-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
@@ -27,15 +24,18 @@ export default function AdminBookingsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {mockBookings.map((b) => (
+              {bookings.map((b) => (
                 <tr key={b.id}>
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-gray-900">{b.kode}</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{b.pelanggan}</td>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-gray-900">{b.kodeBooking}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {b.paket}<br/>
-                    <span className="text-xs text-gray-400">{b.tanggal}</span>
+                    <div className="font-medium text-gray-900">{b.namaPelanggan}</div>
+                    <div className="text-xs text-gray-400">{b.noHp}</div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {b.total.toLocaleString('id-ID')}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {b.package.namaPaket}<br/>
+                    <span className="text-xs text-gray-400">{b.schedule.tanggal} ({b.schedule.jamMulai})</span>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {b.totalHarga.toLocaleString('id-ID')}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm">
                     <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
                       b.status === 'dibayar' ? 'bg-green-50 text-green-700 ring-green-600/20' :

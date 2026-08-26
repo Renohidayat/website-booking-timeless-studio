@@ -1,51 +1,107 @@
-import { listPackages, getPackage, listAdditionalServices, listSchedules, getSchedulesByDate, listVouchers, checkVoucher } from "./dataconnect-sdk";
-import { dataConnect } from "./data-connect";
+import { collection, doc, getDoc, getDocs, query, where, orderBy } from "firebase/firestore";
+import { db } from "./firebase/config";
 
-// Keep dummy arrays for seeding
 export const dummyPackages = [
-  { id_paket: 1, nama_paket: "Package A", kategori: "Intimate / Duos", harga_dasar: 30000, durasi_menit: 10, maks_orang: 2, deskripsi: "10 Mins Unlimited Shots, 1x Physical Print (4R), All Color-graded Soft Files", isPopular: false },
-  { id_paket: 2, nama_paket: "Package B", kategori: "Group / Family", harga_dasar: 50000, durasi_menit: 15, maks_orang: 4, deskripsi: "15 Mins Unlimited Shots, 2x Physical Prints (4R), All Color-graded Soft Files", isPopular: true },
-  { id_paket: 3, nama_paket: "ID Photo", kategori: "Formal / ID", harga_dasar: 35000, durasi_menit: 10, maks_orang: 1, deskripsi: "Max 5 Best Shots, Prints (2x3, 3x4, 4x6), Retouched Soft File", isPopular: false },
+  { id: "pkg1", namaPaket: "Package A", kategori: "Intimate / Duos", hargaDasar: 30000, durasiMenit: 10, maksOrang: 2, deskripsi: "10 Mins Unlimited Shots, 1x Physical Print (4R), All Color-graded Soft Files", isPopular: false },
+  { id: "pkg2", namaPaket: "Package B", kategori: "Group / Family", hargaDasar: 50000, durasiMenit: 15, maksOrang: 4, deskripsi: "15 Mins Unlimited Shots, 2x Physical Prints (4R), All Color-graded Soft Files", isPopular: true },
+  { id: "pkg3", namaPaket: "ID Photo", kategori: "Formal / ID", hargaDasar: 35000, durasiMenit: 10, maksOrang: 1, deskripsi: "Max 5 Best Shots, Prints (2x3, 3x4, 4x6), Retouched Soft File", isPopular: false },
 ];
 
 export const dummySchedules = [
-  { id_jadwal: 1, tanggal: "2026-09-01", jam_mulai: "09:00", jam_selesai: "09:30", status_slot: "tersedia" },
-  { id_jadwal: 2, tanggal: "2026-09-01", jam_mulai: "09:30", jam_selesai: "10:00", status_slot: "dipesan" },
-  { id_jadwal: 3, tanggal: "2026-09-01", jam_mulai: "10:00", jam_selesai: "10:30", status_slot: "tersedia" },
-  { id_jadwal: 4, tanggal: "2026-09-02", jam_mulai: "14:00", jam_selesai: "14:30", status_slot: "tersedia" },
-  { id_jadwal: 5, tanggal: "2026-09-02", jam_mulai: "14:30", jam_selesai: "15:00", status_slot: "tidak_tersedia" },
+  { id: "sch1", tanggal: "2026-09-01", jamMulai: "09:00", jamSelesai: "09:30", statusSlot: "tersedia" },
+  { id: "sch2", tanggal: "2026-09-01", jamMulai: "09:30", jamSelesai: "10:00", statusSlot: "dipesan" },
+  { id: "sch3", tanggal: "2026-09-01", jamMulai: "10:00", jamSelesai: "10:30", statusSlot: "tersedia" },
+  { id: "sch4", tanggal: "2026-09-02", jamMulai: "14:00", jamSelesai: "14:30", statusSlot: "tersedia" },
+  { id: "sch5", tanggal: "2026-09-02", jamMulai: "14:30", jamSelesai: "15:00", statusSlot: "tidak_tersedia" },
 ];
 
 export const getPackages = async () => {
-  const result = await listPackages(dataConnect);
-  return result.data.packages;
+  const q = query(collection(db, "packages"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
 export const getPackageById = async (id) => {
-  const result = await getPackage(dataConnect, { id });
-  return result.data.package;
+  const docRef = doc(db, "packages", id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) return { id: docSnap.id, ...docSnap.data() };
+  return null;
 };
 
 export const getAdditionalServices = async () => {
-  const result = await listAdditionalServices(dataConnect);
-  return result.data.additionalServices;
+  const q = query(collection(db, "additionalServices"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
 export const getSchedules = async (tanggal) => {
+  let q = query(collection(db, "schedules"));
   if (tanggal) {
-    const result = await getSchedulesByDate(dataConnect, { tanggal });
-    return result.data.schedules;
+    q = query(collection(db, "schedules"), where("tanggal", "==", tanggal));
   }
-  const result = await listSchedules(dataConnect);
-  return result.data.schedules;
+  
+  const snapshot = await getDocs(q);
+  const schedules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  // Sort by tanggal then by jamMulai in memory to avoid Firestore Composite Index requirements
+  schedules.sort((a, b) => {
+    if (a.tanggal === b.tanggal) {
+      return a.jamMulai.localeCompare(b.jamMulai);
+    }
+    return a.tanggal.localeCompare(b.tanggal);
+  });
+  
+  return schedules;
 };
 
 export const getVouchers = async () => {
-  const result = await listVouchers(dataConnect);
-  return result.data.vouchers;
+  const q = query(collection(db, "vouchers"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
 export const checkVoucherKode = async (kode) => {
-  const result = await checkVoucher(dataConnect, { kode });
-  return result.data.vouchers[0];
+  const q = query(collection(db, "vouchers"), where("kodeVoucher", "==", kode));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const doc = snapshot.docs[0];
+  return { id: doc.id, ...doc.data() };
+};
+
+export const getBookings = async () => {
+  const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+  const bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  // Manual join for Package and Schedule
+  for (let b of bookings) {
+    if (b.packageId) {
+      const pkg = await getPackageById(b.packageId);
+      b.package = pkg || { namaPaket: "Unknown Package" };
+    }
+    if (b.scheduleId) {
+      const schRef = doc(db, "schedules", b.scheduleId);
+      const schSnap = await getDoc(schRef);
+      b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : { tanggal: "-", jamMulai: "-" };
+    }
+  }
+  
+  return bookings;
+};
+
+export const getBookingById = async (kode) => {
+  const q = query(collection(db, "bookings"), where("kodeBooking", "==", kode));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  
+  const b = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+  if (b.packageId) {
+    b.package = await getPackageById(b.packageId);
+  }
+  if (b.scheduleId) {
+    const schRef = doc(db, "schedules", b.scheduleId);
+    const schSnap = await getDoc(schRef);
+    b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : null;
+  }
+  return b;
 };

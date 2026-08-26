@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getPackages, getAdditionalServices, getSchedules, checkVoucherKode } from "@/lib/data";
+import { createBookingAction } from "@/app/admin/actions";
 import { useAuth } from "@/lib/auth-context";
 import Navbar from "@/components/Navbar";
 
@@ -124,7 +125,22 @@ function BookingFlow() {
       return;
     }
     const kodeBooking = `BKG-${Date.now().toString().slice(-6)}`;
-    router.push(`/payment/${kodeBooking}`);
+    
+    try {
+      await createBookingAction({
+        kodeBooking,
+        namaPelanggan: name,
+        email: email || "guest@example.com",
+        noHp: phone,
+        packageId: selectedPaket.id,
+        scheduleId: selectedSchedule.id,
+        totalHarga: totalBayar
+      });
+      router.push(`/payment/${kodeBooking}`);
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat membuat booking.");
+    }
   };
 
   return (

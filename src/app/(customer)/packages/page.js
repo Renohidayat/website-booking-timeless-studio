@@ -21,7 +21,7 @@ export default async function PackagesPage() {
               const isPopular = pkg.isPopular;
 
               return (
-                <div key={pkg.id_paket} className={isPopular 
+                <div key={pkg.id} className={isPopular 
                   ? "bg-studio-900 text-white p-8 border border-studio-900 flex flex-col justify-between relative shadow-lg transform md:-translate-y-4" 
                   : "bg-white p-8 border border-studio-200 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"}>
                   
@@ -29,15 +29,15 @@ export default async function PackagesPage() {
                   
                   <div>
                     <span className={`text-[10px] font-semibold tracking-[0.15em] uppercase ${isPopular ? 'text-studio-400' : 'text-studio-400'}`}>{pkg.kategori}</span>
-                    <h3 className={`text-2xl font-serif font-semibold mt-2 ${isPopular ? '' : 'text-studio-900'}`}>{pkg.nama_paket}</h3>
+                    <h3 className={`text-2xl font-serif font-semibold mt-2 ${isPopular ? '' : 'text-studio-900'}`}>{pkg.namaPaket}</h3>
                     <div className="my-6">
-                      <span className={`text-3xl font-medium ${isPopular ? '' : 'text-studio-900'}`}>Rp {pkg.harga_dasar.toLocaleString('id-ID')}</span>
-                      <span className={`text-sm ${isPopular ? 'text-studio-400' : 'text-studio-500'}`}> / {pkg.durasi_menit} Min</span>
+                      <span className={`text-3xl font-medium ${isPopular ? '' : 'text-studio-900'}`}>Rp {pkg.hargaDasar.toLocaleString('id-ID')}</span>
+                      <span className={`text-sm ${isPopular ? 'text-studio-400' : 'text-studio-500'}`}> / {pkg.durasiMenit} Min</span>
                     </div>
                     
                     <ul className={`text-sm space-y-4 mb-8 ${isPopular ? 'text-studio-300' : 'text-studio-600'}`}>
                       <li className="flex items-start gap-3">
-                        <i className="fa-solid fa-check mt-1 text-xs"></i> Max {pkg.maks_orang} Person{pkg.maks_orang > 1 ? 's' : ''}
+                        <i className="fa-solid fa-check mt-1 text-xs"></i> Max {pkg.maksOrang} Person{pkg.maksOrang > 1 ? 's' : ''}
                       </li>
                       {features.map((f, i) => (
                         <li key={i} className="flex items-start gap-3">
@@ -47,7 +47,7 @@ export default async function PackagesPage() {
                     </ul>
                   </div>
                   
-                  <Link href={`/booking?paket=${pkg.id_paket}`} className={isPopular 
+                  <Link href={`/booking?paket=${pkg.id}`} className={isPopular 
                     ? "bg-white text-studio-900 hover:bg-studio-100 transition-colors w-full py-3 rounded-sm text-sm text-center font-medium uppercase tracking-wide block mt-8" 
                     : "btn-outline w-full py-3 rounded-sm text-sm font-medium uppercase tracking-wide text-center block mt-8"}>
                     Select Package

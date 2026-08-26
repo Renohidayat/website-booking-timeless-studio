@@ -31,12 +31,12 @@ export default async function AdminVouchersPage() {
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
               {vouchers.map((v) => (
-                <tr key={v.id_voucher}>
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-indigo-600">{v.kode_voucher}</td>
+                <tr key={v.id}>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-indigo-600">{v.kodeVoucher}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {v.tipe_diskon === 'persen' ? `${v.nilai_diskon}%` : `Rp ${v.nilai_diskon.toLocaleString('id-ID')}`}
+                    {v.tipeDiskon === 'persen' ? `${v.nilaiDiskon}%` : `Rp ${v.nilaiDiskon.toLocaleString('id-ID')}`}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{v.tgl_berakhir}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{v.tglBerakhir}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{v.kuota}</td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                     <button className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
