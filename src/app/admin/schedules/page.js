@@ -1,4 +1,5 @@
 import { getSchedules } from "@/lib/data";
+import { ActionButtons, CreateButton } from "@/components/AdminActions";
 
 export default async function AdminSchedulesPage() {
   const schedules = await getSchedules();
@@ -11,9 +12,7 @@ export default async function AdminSchedulesPage() {
           <p className="mt-2 text-sm text-gray-700">Kelola ketersediaan slot waktu untuk pemesanan.</p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-            Tambah Jadwal
-          </button>
+          <CreateButton label="Tambah Jadwal" entityName="Jadwal" />
         </div>
       </div>
       
@@ -45,8 +44,7 @@ export default async function AdminSchedulesPage() {
                     </span>
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <button className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                    <button className="text-red-600 hover:text-red-900">Hapus</button>
+                    <ActionButtons id={s.id_jadwal} entityName="Jadwal" />
                   </td>
                 </tr>
               ))}
