@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function PaymentPage() {
   const { kode_booking } = useParams();
@@ -29,71 +30,68 @@ export default function PaymentPage() {
     }, 1500);
   };
 
-  if (loading || !user) return <div className="p-12 text-center">Memuat...</div>;
+  if (loading || !user) return <div className="p-12 text-center min-h-[calc(100vh-72px)]">Memuat...</div>;
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white p-8 text-center rounded-2xl shadow-xl">
-          <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Bukti Berhasil Diunggah</h2>
-          <p className="text-gray-600 mb-6">Admin kami akan memverifikasi pembayaran Anda segera. Terima kasih!</p>
-          <Link href="/history" className="text-indigo-600 font-semibold hover:text-indigo-500">Lihat Riwayat Pesanan</Link>
-        </div>
-      </div>
+      <>
+        <Navbar />
+        <section className="flex-col p-6 lg:p-12 bg-white min-h-[calc(100vh-72px)] flex items-center justify-center">
+            <div className="max-w-md w-full bg-studio-50 p-12 text-center border border-studio-200 rounded-sm">
+                <i className="fa-regular fa-circle-check text-5xl text-studio-900 mb-6 block"></i>
+                <h2 className="text-2xl font-serif font-semibold text-studio-900 mb-2">Payment Received</h2>
+                <p className="text-studio-600 text-sm mb-8">Your receipt has been uploaded successfully. We will verify your payment shortly.</p>
+                <Link href="/history" className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide block uppercase">
+                    View My Ticket
+                </Link>
+            </div>
+        </section>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-xl">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-indigo-600 px-6 py-4">
-            <h2 className="text-xl font-bold text-white">Pembayaran Booking</h2>
-            <p className="text-indigo-200 text-sm mt-1">Kode: {kode_booking}</p>
-          </div>
-
-          <div className="p-6 md:p-8 space-y-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-900 mb-2">Instruksi Pembayaran</h3>
-              <p className="text-sm text-blue-800 mb-2">Silakan transfer sesuai total tagihan ke rekening berikut:</p>
-              <div className="bg-white p-3 rounded text-center border font-mono text-lg font-bold text-gray-900 tracking-wider">
-                BCA 1234567890<br/>
-                <span className="text-sm text-gray-500 tracking-normal font-sans">a.n. Timeless Studio</span>
+    <>
+      <Navbar />
+      <section className="flex-col p-6 lg:p-12 bg-white min-h-[calc(100vh-72px)]">
+          <div className="max-w-2xl mx-auto w-full space-y-8 pt-8">
+              <div className="border-b border-studio-200 pb-6 text-center">
+                  <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Final Step</span>
+                  <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Secure Payment</h2>
+                  <p className="mt-2 text-sm text-studio-600">Booking Ref: <span className="font-semibold text-studio-900">{kode_booking}</span></p>
               </div>
-            </div>
 
-            <form onSubmit={handleUpload} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Upload Bukti Transfer</label>
-                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:bg-gray-50 transition-colors">
-                  <div className="space-y-1 text-center">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <div className="flex text-sm text-gray-600 justify-center">
-                      <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                        <span>Upload a file</span>
-                        <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={e => setFile(e.target.files[0])} accept="image/*" required />
-                      </label>
-                    </div>
-                    <p className="text-xs text-gray-500">{file ? file.name : "PNG, JPG up to 2MB"}</p>
+              <div className="bg-studio-50 p-8 border border-studio-200 rounded-sm space-y-6">
+                  <div className="text-center">
+                      <p className="text-sm font-medium text-studio-500 uppercase tracking-widest mb-2">Transfer To</p>
+                      <h3 className="text-3xl font-serif font-semibold text-studio-900 mb-1">BCA 1234567890</h3>
+                      <p className="text-sm text-studio-600">a.n Timeless Studio</p>
                   </div>
-                </div>
+                  
+                  <div className="text-center pt-6 border-t border-studio-200">
+                      <p className="text-sm font-medium text-studio-500 uppercase tracking-widest mb-2">Amount Due</p>
+                      <h3 className="text-3xl font-medium text-studio-900 mb-1">Rp 30.000</h3>
+                      <p className="text-xs text-studio-500">Please transfer the exact amount.</p>
+                  </div>
               </div>
 
-              <button
-                type="submit" disabled={!file || isSubmitting}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-              >
-                {isSubmitting ? "Mengunggah..." : "Konfirmasi Pembayaran"}
-              </button>
-            </form>
+              <div className="space-y-4 pt-4">
+                  <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Upload Transfer Receipt</label>
+                  <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-40 border-2 border-studio-200 border-dashed rounded-sm cursor-pointer bg-studio-50 hover:bg-studio-100 transition">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <i className="fa-solid fa-cloud-arrow-up text-2xl text-studio-400 mb-3"></i>
+                          <p className="text-sm text-studio-500"><span className="font-semibold text-studio-900">Click to upload</span> or drag and drop</p>
+                          <p className="text-xs text-studio-400 mt-1">{file ? file.name : "SVG, PNG, JPG or GIF (MAX. 2MB)"}</p>
+                      </div>
+                      <input id="file-upload" type="file" className="hidden" onChange={e => setFile(e.target.files[0])} accept="image/*" />
+                  </label>
+                  
+                  <button onClick={handleUpload} disabled={!file || isSubmitting} className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide uppercase disabled:opacity-50">
+                      {isSubmitting ? "Uploading..." : "Confirm Payment"}
+                  </button>
+              </div>
           </div>
-        </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }

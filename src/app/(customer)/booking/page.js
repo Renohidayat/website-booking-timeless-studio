@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getPackages, getAdditionalServices, getSchedules, checkVoucher } from "@/lib/data";
 import { useAuth } from "@/lib/auth-context";
+import Navbar from "@/components/Navbar";
 
 function BookingFlow() {
   const searchParams = useSearchParams();
@@ -21,15 +22,24 @@ function BookingFlow() {
   // Booking State
   const [selectedPaket, setSelectedPaket] = useState(null);
   const [selectedServices, setSelectedServices] = useState({}); // { id_layanan: jumlah }
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [voucherCode, setVoucherCode] = useState("");
   const [appliedVoucher, setAppliedVoucher] = useState(null);
   const [voucherError, setVoucherError] = useState("");
+  
+  // User Form
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login");
+    } else if (user) {
+       setEmail(user.email);
+       // Split email for default name
+       setName(user.email.split("@")[0]);
     }
   }, [user, authLoading, router]);
 
@@ -41,6 +51,9 @@ function BookingFlow() {
       if (initialPaketId) {
         const pkg = pkgs.find(p => p.id_paket === Number(initialPaketId));
         if (pkg) setSelectedPaket(pkg);
+      } else {
+        // Default select the first package if none provided
+        setSelectedPaket(pkgs[0]);
       }
       setLoading(false);
     }
@@ -55,7 +68,7 @@ function BookingFlow() {
     }
   }, [selectedDate]);
 
-  if (loading || authLoading || !user) return <div className="p-12 text-center">Memuat...</div>;
+  if (loading || authLoading || !user) return <div className="p-12 text-center min-h-[calc(100vh-72px)]">Memuat...</div>;
 
   // Kalkulasi
   const subtotalPaket = selectedPaket ? selectedPaket.harga_dasar : 0;
@@ -78,7 +91,7 @@ function BookingFlow() {
     if (v) {
       setAppliedVoucher(v);
     } else {
-      setVoucherError("Kode voucher tidak valid atau kedaluwarsa.");
+      setVoucherError("Kode voucher tidak valid.");
       setAppliedVoucher(null);
     }
   };
@@ -87,7 +100,8 @@ function BookingFlow() {
     setSelectedServices(prev => {
       const current = prev[id] || 0;
       const next = current + change;
-      if (next <= 0) {
+      if (next < 0) return prev;
+      if (next === 0) {
         const copy = { ...prev };
         delete copy[id];
         return copy;
@@ -96,211 +110,204 @@ function BookingFlow() {
     });
   };
 
+  const proceedToStep2 = () => {
+    if (!selectedSchedule) {
+      alert("Please select a time slot first.");
+      return;
+    }
+    setStep(2);
+  };
+
   const submitBooking = async () => {
-    // Simulasi insert ke backend
-    // Pada implementasi riil, ini akan memanggil Firebase Data Connect
+    if (!name || !phone) {
+      alert("Please fill in your name and phone number.");
+      return;
+    }
     const kodeBooking = `BKG-${Date.now().toString().slice(-6)}`;
-    // Langsung arahkan ke halaman tiket
-    router.push(`/booking/${kodeBooking}/ticket`);
+    router.push(`/payment/${kodeBooking}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-3xl bg-white shadow-xl rounded-2xl overflow-hidden">
-        {/* Progress Bar */}
-        <div className="bg-slate-900 px-6 py-4">
-          <h2 className="text-xl font-bold text-white">Booking Self Photo</h2>
-          <div className="flex gap-2 mt-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className={`h-2 flex-1 rounded-full ${step >= i ? 'bg-indigo-500' : 'bg-slate-700'}`} />
-            ))}
-          </div>
-        </div>
-
-        <div className="p-6 md:p-8">
-          {step === 1 && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">1. Pilih Paket & Layanan Tambahan</h3>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Paket Utama</label>
-                <select 
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                  value={selectedPaket?.id_paket || ""}
-                  onChange={(e) => setSelectedPaket(packages.find(p => p.id_paket === Number(e.target.value)))}
-                >
-                  <option value="" disabled>Pilih Paket</option>
-                  {packages.map(p => <option key={p.id_paket} value={p.id_paket}>{p.nama_paket} - Rp {p.harga_dasar.toLocaleString('id-ID')}</option>)}
-                </select>
-              </div>
-
-              {selectedPaket && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Layanan Tambahan (Opsional)</label>
-                  <div className="space-y-3">
-                    {services.map(s => (
-                      <div key={s.id_layanan} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div>
-                          <p className="font-medium text-gray-900">{s.nama_layanan}</p>
-                          <p className="text-sm text-gray-500">+ Rp {s.harga_satuan.toLocaleString('id-ID')}</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <button onClick={() => handleServiceChange(s.id_layanan, -1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold">-</button>
-                          <span className="w-4 text-center">{selectedServices[s.id_layanan] || 0}</span>
-                          <button onClick={() => handleServiceChange(s.id_layanan, 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold">+</button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+    <>
+      <Navbar />
+      
+      {step === 1 && (
+        <section className="flex-col p-6 lg:p-12 bg-white min-h-[calc(100vh-72px)]">
+            <div className="max-w-3xl mx-auto w-full space-y-8 pt-8">
+                <div className="border-b border-studio-200 pb-6">
+                    <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Step 1 of 3</span>
+                    <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Select Date & Time</h2>
+                    {selectedPaket && <p className="mt-2 text-sm text-studio-600 font-medium">Package: {selectedPaket.nama_paket}</p>}
                 </div>
-              )}
 
-              <div className="flex justify-end pt-4">
-                <button 
-                  disabled={!selectedPaket}
-                  onClick={() => setStep(2)}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-500 disabled:opacity-50"
-                >
-                  Lanjut ke Jadwal
-                </button>
-              </div>
-            </div>
-          )}
+                <div className="space-y-8">
+                    <div>
+                        <label className="block text-sm font-medium text-studio-900 mb-3">Choose Date</label>
+                        <input 
+                          type="date" 
+                          value={selectedDate} 
+                          onChange={(e) => { setSelectedDate(e.target.value); setSelectedSchedule(null); }}
+                          min={new Date().toISOString().split("T")[0]}
+                          className="w-full bg-studio-50 border border-studio-200 p-4 text-sm text-studio-900 font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" 
+                        />
+                    </div>
 
-          {step === 2 && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">2. Pilih Tanggal & Waktu</h3>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Sesi</label>
-                <input
-                  type="date"
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
-                  value={selectedDate}
-                  onChange={(e) => { setSelectedDate(e.target.value); setSelectedSchedule(null); }}
-                  min={new Date().toISOString().split("T")[0]}
-                />
-              </div>
+                    <div>
+                        <div className="flex items-center justify-between mb-4">
+                            <label className="block text-sm font-medium text-studio-900">Available Time Slots</label>
+                            <div className="flex items-center gap-4 text-xs text-studio-500">
+                                <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-studio-900"></span> Available</span>
+                                <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-studio-300"></span> Booked</span>
+                            </div>
+                        </div>
 
-              {selectedDate && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Slot Tersedia</label>
-                  {schedules.length === 0 ? (
-                    <p className="text-sm text-red-600">Maaf, tidak ada slot tersedia di tanggal ini.</p>
-                  ) : (
-                    <div className="grid grid-cols-3 gap-3">
-                      {schedules.map(s => (
-                        <button
-                          key={s.id_jadwal}
-                          onClick={() => setSelectedSchedule(s)}
-                          className={`p-3 rounded-lg border text-sm font-medium transition-colors ${
-                            selectedSchedule?.id_jadwal === s.id_jadwal 
-                              ? "border-indigo-600 bg-indigo-50 text-indigo-700" 
-                              : "border-gray-200 hover:border-indigo-300 text-gray-700"
-                          }`}
-                        >
-                          {s.jam_mulai}
+                        {schedules.length === 0 ? (
+                           <p className="text-sm text-red-600">No slots available on this date.</p>
+                        ) : (
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                              {schedules.map(s => (
+                                <button 
+                                  key={s.id_jadwal}
+                                  onClick={() => setSelectedSchedule(s)} 
+                                  className={`p-3 border text-sm font-medium text-center transition rounded-sm ${selectedSchedule?.id_jadwal === s.id_jadwal ? 'bg-studio-900 text-white border-studio-900' : 'border-studio-200 hover:border-studio-900 text-studio-900 bg-white'}`}
+                                >
+                                  {s.jam_mulai} - {s.jam_selesai}
+                                </button>
+                              ))}
+                          </div>
+                        )}
+                    </div>
+
+                    <div className="flex justify-between items-center pt-8 border-t border-studio-200">
+                        <button onClick={() => router.push('/packages')} className="text-sm text-studio-500 hover:text-studio-900 transition">
+                            Back
                         </button>
-                      ))}
+                        <button onClick={proceedToStep2} className="btn-primary px-8 py-3 rounded-sm text-sm font-medium tracking-wide">
+                            Continue
+                        </button>
                     </div>
-                  )}
                 </div>
-              )}
-
-              <div className="flex justify-between pt-4">
-                <button onClick={() => setStep(1)} className="text-gray-600 hover:text-gray-900 font-medium">Kembali</button>
-                <button 
-                  disabled={!selectedSchedule}
-                  onClick={() => setStep(3)}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-500 disabled:opacity-50"
-                >
-                  Lanjut ke Pembayaran
-                </button>
-              </div>
             </div>
-          )}
+        </section>
+      )}
 
-          {step === 3 && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">3. Ringkasan & Konfirmasi</h3>
-              
-              <div className="bg-gray-50 p-6 rounded-lg space-y-4">
-                <div className="flex justify-between pb-4 border-b">
-                  <div>
-                    <p className="font-semibold text-gray-900">{selectedPaket.nama_paket}</p>
-                    <p className="text-sm text-gray-500">{selectedDate} | {selectedSchedule.jam_mulai} - {selectedSchedule.jam_selesai}</p>
-                  </div>
-                  <p className="font-semibold text-gray-900">Rp {subtotalPaket.toLocaleString('id-ID')}</p>
-                </div>
+      {step === 2 && (
+        <section className="flex-col p-6 lg:p-12 bg-studio-50 min-h-[calc(100vh-72px)]">
+            <div className="max-w-5xl mx-auto w-full grid md:grid-cols-5 gap-12 pt-8">
+                {/* Form */}
+                <div className="md:col-span-3 space-y-8">
+                    <div className="border-b border-studio-200 pb-6">
+                        <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Step 2 of 3</span>
+                        <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Your Details</h2>
+                    </div>
 
-                {Object.keys(selectedServices).length > 0 && (
-                  <div className="pb-4 border-b space-y-2">
-                    <p className="text-sm font-medium text-gray-700">Layanan Tambahan:</p>
-                    {Object.entries(selectedServices).map(([id, qty]) => {
-                      const svc = services.find(s => s.id_layanan === Number(id));
-                      return (
-                        <div key={id} className="flex justify-between text-sm text-gray-600">
-                          <p>{svc.nama_layanan} x {qty}</p>
-                          <p>Rp {(svc.harga_satuan * qty).toLocaleString('id-ID')}</p>
+                    <div className="space-y-6">
+                        <div>
+                            <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Full Name</label>
+                            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" />
                         </div>
-                      )
-                    })}
-                  </div>
-                )}
 
-                <div className="pb-4 border-b">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Punya Kode Voucher?</label>
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      className="flex-1 rounded-md border-gray-300 shadow-sm p-2 border text-sm uppercase"
-                      placeholder="Masukkan kode promo"
-                      value={voucherCode} onChange={e => setVoucherCode(e.target.value.toUpperCase())}
-                    />
-                    <button onClick={handleApplyVoucher} className="bg-gray-800 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700">Terapkan</button>
-                  </div>
-                  {voucherError && <p className="text-red-500 text-xs mt-1">{voucherError}</p>}
-                  {appliedVoucher && <p className="text-green-600 text-xs mt-1">Voucher '{appliedVoucher.kode_voucher}' berhasil diterapkan!</p>}
-                </div>
+                        <div className="grid grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Phone</label>
+                                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="08..." className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Email</label>
+                                <input type="email" value={email} disabled className="w-full bg-studio-100 border border-studio-200 p-3.5 text-sm font-medium text-studio-500 rounded-sm cursor-not-allowed" />
+                            </div>
+                        </div>
 
-                <div className="pt-2 space-y-2">
-                  <div className="flex justify-between text-gray-600">
-                    <p>Subtotal</p>
-                    <p>Rp {totalSebelumDiskon.toLocaleString('id-ID')}</p>
-                  </div>
-                  {diskon > 0 && (
-                    <div className="flex justify-between text-green-600">
-                      <p>Diskon</p>
-                      <p>- Rp {diskon.toLocaleString('id-ID')}</p>
+                        <div className="pt-6 border-t border-studio-200">
+                            <h4 className="text-sm font-medium text-studio-900 mb-4">Add-ons</h4>
+                            <div className="space-y-3">
+                                {services.map(s => (
+                                  <div key={s.id_layanan} className="flex items-center justify-between p-4 bg-white border border-studio-200 rounded-sm">
+                                      <div>
+                                          <span className="text-sm font-medium text-studio-900 block">{s.nama_layanan}</span>
+                                          <span className="text-xs text-studio-500">+Rp {s.harga_satuan.toLocaleString('id-ID')}</span>
+                                      </div>
+                                      <div className="flex items-center gap-3">
+                                          <button onClick={() => handleServiceChange(s.id_layanan, -1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">-</button>
+                                          <span className="text-sm font-medium w-4 text-center">{selectedServices[s.id_layanan] || 0}</span>
+                                          <button onClick={() => handleServiceChange(s.id_layanan, 1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">+</button>
+                                      </div>
+                                  </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                  )}
-                  <div className="flex justify-between font-bold text-xl text-gray-900 pt-2 border-t">
-                    <p>Total Bayar</p>
-                    <p>Rp {totalBayar.toLocaleString('id-ID')}</p>
-                  </div>
                 </div>
-              </div>
 
-              <div className="flex justify-between pt-4">
-                <button onClick={() => setStep(2)} className="text-gray-600 hover:text-gray-900 font-medium">Kembali</button>
-                <button 
-                  onClick={submitBooking}
-                  className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-500 shadow-lg hover:shadow-xl transition-all"
-                >
-                  Konfirmasi Booking
-                </button>
-              </div>
+                {/* Summary */}
+                <div className="md:col-span-2">
+                    <div className="bg-white p-8 border border-studio-200 rounded-sm sticky top-24">
+                        <h3 className="font-serif font-semibold text-xl text-studio-900 mb-6">Summary</h3>
+
+                        <div className="space-y-3 text-sm mb-6 border-b border-studio-200 pb-6">
+                            <div className="flex justify-between">
+                                <span className="text-studio-500">Package</span>
+                                <span className="font-medium text-studio-900">{selectedPaket?.nama_paket || "-"}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-studio-500">Date</span>
+                                <span className="font-medium text-studio-900">{selectedDate || "-"}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-studio-500">Time</span>
+                                <span className="font-medium text-studio-900">{selectedSchedule?.jam_mulai || "-"}</span>
+                            </div>
+                        </div>
+
+                        <div className="mb-6 border-b border-studio-200 pb-6">
+                            <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Promo Code</label>
+                            <div className="flex gap-2">
+                                <input type="text" value={voucherCode} onChange={e => setVoucherCode(e.target.value.toUpperCase())} className="w-full bg-studio-50 border border-studio-200 p-2.5 text-sm uppercase font-medium focus:ring-1 focus:ring-studio-900 focus:outline-none rounded-sm transition" />
+                                <button onClick={handleApplyVoucher} className="btn-outline px-4 text-xs font-medium rounded-sm">Apply</button>
+                            </div>
+                            {voucherError && <p className="text-xs font-medium text-red-600 mt-2">{voucherError}</p>}
+                            {appliedVoucher && <p className="text-xs font-medium text-green-700 mt-2">Code applied successfully.</p>}
+                        </div>
+
+                        <div className="space-y-2 text-sm mb-8">
+                            <div className="flex justify-between text-studio-600">
+                                <span>Subtotal</span>
+                                <span>Rp {subtotalPaket.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div className="flex justify-between text-studio-600">
+                                <span>Add-ons</span>
+                                <span>Rp {subtotalLayanan.toLocaleString('id-ID')}</span>
+                            </div>
+                            {diskon > 0 && (
+                              <div className="flex justify-between text-green-700 font-medium">
+                                  <span>Discount</span>
+                                  <span>-Rp {diskon.toLocaleString('id-ID')}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between text-lg font-semibold text-studio-900 pt-4 border-t border-studio-200">
+                                <span>Total</span>
+                                <span>Rp {totalBayar.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+
+                        <button onClick={submitBooking} className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide uppercase">
+                            Proceed to Payment
+                        </button>
+                        <button onClick={() => setStep(1)} className="w-full text-center text-xs text-studio-500 hover:text-studio-900 mt-4 transition">
+                            Back
+                        </button>
+                    </div>
+                </div>
             </div>
-          )}
-        </div>
-      </div>
-    </div>
+        </section>
+      )}
+    </>
   );
 }
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="p-12 text-center">Memuat...</div>}>
       <BookingFlow />
     </Suspense>
   );
