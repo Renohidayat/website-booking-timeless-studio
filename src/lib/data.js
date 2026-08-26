@@ -54,7 +54,7 @@ export const getPackageById = async (id) => dummyPackages.find((p) => p.id_paket
 export const getAdditionalServices = async () => [...dummyAdditionalServices];
 
 // Mock Schedules
-export const dummySchedules = [
+export let dummySchedules = [
   { id_jadwal: 1, tanggal: "2026-09-01", jam_mulai: "09:00", jam_selesai: "09:30", status_slot: "tersedia" },
   { id_jadwal: 2, tanggal: "2026-09-01", jam_mulai: "09:30", jam_selesai: "10:00", status_slot: "dipesan" },
   { id_jadwal: 3, tanggal: "2026-09-01", jam_mulai: "10:00", jam_selesai: "10:30", status_slot: "tersedia" },
