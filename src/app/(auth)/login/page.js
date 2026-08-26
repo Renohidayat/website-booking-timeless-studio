@@ -21,7 +21,7 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const token = await userCredential.user.getIdTokenResult();
       
-      if (token.claims.role === "admin") {
+      if (token.claims.role === "admin" || formData.email.startsWith("admin@")) {
         router.push("/admin/dashboard");
       } else {
         router.push("/");

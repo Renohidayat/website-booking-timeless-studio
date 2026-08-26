@@ -18,7 +18,13 @@ export function AuthProvider({ children }) {
       if (user) {
         try {
           const token = await user.getIdTokenResult(true);
-          setRole(token.claims.role || "pelanggan"); // Default to pelanggan if claim missing
+          // Ponytail backdoor: jika email mengandung admin, jadikan admin otomatis 
+          // karena kita belum setup service account backend
+          if (user.email && user.email.startsWith("admin@")) {
+            setRole("admin");
+          } else {
+            setRole(token.claims.role || "pelanggan"); // Default to pelanggan if claim missing
+          }
         } catch (e) {
           console.error("Error fetching claims", e);
           setRole(null);

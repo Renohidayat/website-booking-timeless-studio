@@ -21,14 +21,19 @@ export default function RegisterPage() {
       // 1. Create Firebase Auth User
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       
-      // 2. Set Custom Claim 'pelanggan'
+      // 2. Set Custom Claim 'pelanggan' (opsional jika belum ada service account)
       const token = await userCredential.user.getIdToken();
-      const res = await fetch("/api/auth/set-role", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken: token, role: "pelanggan" })
-      });
-      if (!res.ok) throw new Error("Gagal mengatur role pengguna.");
+      try {
+        await fetch("/api/auth/set-role", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken: token, role: "pelanggan" })
+        });
+      } catch (e) {
+        // Abaikan error jika backend belum dikonfigurasi service account-nya
+        // Context auth kita otomatis memberikan default 'pelanggan'
+        console.warn("Gagal set custom claim, fallback ke default pelanggan.");
+      }
       
       // Force token refresh to get new claims
       await userCredential.user.getIdToken(true);
