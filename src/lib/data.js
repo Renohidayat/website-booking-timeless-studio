@@ -128,10 +128,19 @@ export const getBookings = async () => {
       const pkg = await getPackageById(b.packageId);
       b.package = pkg || { namaPaket: "Unknown Package" };
     }
-    if (b.scheduleId) {
+    
+    if (b.tanggal && b.jamMulai) {
+      let [h, m] = b.jamMulai.split(':');
+      let endH = parseInt(h);
+      let endM = "30";
+      if (m === "30") { endH++; endM = "00"; }
+      b.schedule = { tanggal: b.tanggal, jamMulai: b.jamMulai, jamSelesai: `${endH.toString().padStart(2, '0')}:${endM}` };
+    } else if (b.scheduleId) {
       const schRef = doc(db, "schedules", b.scheduleId);
       const schSnap = await getDoc(schRef);
-      b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : { tanggal: "-", jamMulai: "-" };
+      b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : { tanggal: "-", jamMulai: "-", jamSelesai: "-" };
+    } else {
+      b.schedule = { tanggal: "-", jamMulai: "-", jamSelesai: "-" };
     }
   }
   
@@ -147,7 +156,14 @@ export const getBookingById = async (kode) => {
   if (b.packageId) {
     b.package = await getPackageById(b.packageId);
   }
-  if (b.scheduleId) {
+  
+  if (b.tanggal && b.jamMulai) {
+    let [h, m] = b.jamMulai.split(':');
+    let endH = parseInt(h);
+    let endM = "30";
+    if (m === "30") { endH++; endM = "00"; }
+    b.schedule = { tanggal: b.tanggal, jamMulai: b.jamMulai, jamSelesai: `${endH.toString().padStart(2, '0')}:${endM}` };
+  } else if (b.scheduleId) {
     const schRef = doc(db, "schedules", b.scheduleId);
     const schSnap = await getDoc(schRef);
     b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : null;
@@ -169,10 +185,19 @@ export const getBookingsByEmail = async (email) => {
       const pkg = await getPackageById(b.packageId);
       b.package = pkg || { namaPaket: "Unknown Package", kategori: "-" };
     }
-    if (b.scheduleId) {
+    
+    if (b.tanggal && b.jamMulai) {
+      let [h, m] = b.jamMulai.split(':');
+      let endH = parseInt(h);
+      let endM = "30";
+      if (m === "30") { endH++; endM = "00"; }
+      b.schedule = { tanggal: b.tanggal, jamMulai: b.jamMulai, jamSelesai: `${endH.toString().padStart(2, '0')}:${endM}` };
+    } else if (b.scheduleId) {
       const schRef = doc(db, "schedules", b.scheduleId);
       const schSnap = await getDoc(schRef);
       b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : { tanggal: "-", jamMulai: "-", jamSelesai: "-" };
+    } else {
+      b.schedule = { tanggal: "-", jamMulai: "-", jamSelesai: "-" };
     }
   }
   
