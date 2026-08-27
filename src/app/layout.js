@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           {children}
           
           {/* Global Footer */}
-          <footer className="bg-white border-t border-studio-200 mt-auto">
+          <footer className="bg-white border-t border-studio-900 mt-auto">
             <div className="max-w-6xl mx-auto px-6 py-12">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div className="md:col-span-2">
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
                   </ul>
                 </div>
               </div>
-              <div className="border-t border-studio-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="border-t border-studio-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-xs text-studio-400">
                   &copy; 2026 Timeless Photo Studio. Hak cipta dilindungi.
                 </div>

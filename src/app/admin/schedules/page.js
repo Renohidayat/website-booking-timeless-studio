@@ -8,7 +8,7 @@ export default function AdminSchedulesPage() {
         </div>
       </div>
       
-      <div className="mt-4 bg-studio-50 border border-studio-200 rounded-xl p-8 text-center max-w-2xl mx-auto">
+      <div className="mt-4 bg-studio-50 border border-studio-900 rounded-xl p-8 text-center max-w-2xl mx-auto">
         <div className="mx-auto w-16 h-16 bg-studio-200 rounded-full flex items-center justify-center mb-4">
            <i className="fa-solid fa-robot text-2xl text-studio-900"></i>
         </div>
@@ -17,7 +17,7 @@ export default function AdminSchedulesPage() {
           Anda tidak perlu lagi membuat slot jadwal secara manual. Sistem kini secara pintar dan otomatis akan memunculkan slot waktu kepada pelanggan berdasarkan jam operasional di bawah ini.
         </p>
         
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-studio-200 text-left">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-studio-900 text-left">
            <h3 className="font-semibold text-gray-900 mb-4 border-b pb-2">Jam Operasional Tetap</h3>
            <ul className="space-y-3">
              <li className="flex justify-between items-center text-sm">

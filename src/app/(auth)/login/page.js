@@ -38,7 +38,7 @@ export default function LoginPage() {
     <>
       <Navbar />
       <div className="flex min-h-[calc(100vh-72px)] items-center justify-center bg-studio-50 p-4">
-        <div className="w-full max-w-md space-y-8 bg-white p-10 border border-studio-200 rounded-sm shadow-sm">
+        <div className="w-full max-w-md space-y-8 bg-white p-10 border border-studio-900 rounded-sm shadow-sm">
           <div className="text-center">
             <h2 className="text-3xl font-serif font-semibold tracking-tight text-studio-900">Welcome Back</h2>
             <p className="mt-2 text-sm text-studio-500 uppercase tracking-widest">Sign in to your account</p>
