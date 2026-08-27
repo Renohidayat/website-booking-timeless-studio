@@ -55,6 +55,7 @@ export async function POST(request) {
     }
   } catch (error) {
     console.error("Error creating transaction:", error);
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    const errorMessage = error.response?.data?.message || error.message;
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
   }
 }

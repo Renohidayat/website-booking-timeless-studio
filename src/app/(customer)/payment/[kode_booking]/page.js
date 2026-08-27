@@ -96,25 +96,38 @@ export default function PaymentPage() {
                 <h2 className="text-xl font-serif font-semibold text-studio-900 mb-2">Selesaikan Pembayaran</h2>
                 <p className="text-studio-500 text-sm mb-8">Silakan scan QR Code atau gunakan tautan pembayaran di bawah ini.</p>
                 
-                {paymentData.qr_base64 ? (
+                {paymentData.code === 'qris' && paymentData.qr_image ? (
                   <div className="flex justify-center mb-6 bg-white p-4 rounded-lg inline-block border border-studio-200">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={paymentData.qr_base64} alt="QR Code Pembayaran" className="w-48 h-48" />
+                    <img src={paymentData.qr_image} alt="QR Code Pembayaran" className="w-48 h-48 object-contain" />
+                  </div>
+                ) : null}
+
+                {paymentData.code === 'dana' && paymentData.payment_number ? (
+                  <div className="mb-6 text-left bg-studio-100 p-4 rounded-md">
+                    <p className="text-sm font-semibold text-studio-900 mb-1">Nomor Pembayaran DANA:</p>
+                    <p className="text-xl font-mono font-bold text-studio-900 mb-4">{paymentData.payment_number}</p>
+                    <p className="text-sm font-semibold text-studio-900 mb-1">Instruksi:</p>
+                    <pre className="text-xs text-studio-600 whitespace-pre-wrap font-sans">
+                      {paymentData.instructions}
+                    </pre>
                   </div>
                 ) : null}
 
                 <div className="text-3xl font-bold text-studio-900 mb-6">
-                  Rp {totalAmount.toLocaleString('id-ID')}
+                  Rp {(paymentData.amount || totalAmount).toLocaleString('id-ID')}
                 </div>
                 
-                <a 
-                  href={paymentData.checkout_url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="btn-primary w-full py-3 rounded-sm text-sm font-medium tracking-wide block uppercase mb-4"
-                >
+                {paymentData.checkout_url && (
+                  <a 
+                    href={paymentData.checkout_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn-primary w-full py-3 rounded-sm text-sm font-medium tracking-wide block uppercase mb-4"
+                  >
                     Buka Link Pembayaran
-                </a>
+                  </a>
+                )}
                 
                 <p className="text-xs text-studio-400">
                   <i className="fa-solid fa-spinner fa-spin mr-2"></i>
