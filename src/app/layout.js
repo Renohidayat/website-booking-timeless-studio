@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
               </div>
               <div className="border-t border-studio-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="text-xs text-studio-400">
-                  &copy; 2026 Timeless Photo Studio. All rights reserved.
+                  &copy; 2026 Timeless Photo Studio. Hak cipta dilindungi.
                 </div>
                 <div className="flex gap-4 text-studio-400">
                   <a href="#" className="hover:text-studio-900 transition-colors"><i className="fa-brands fa-instagram text-lg"></i></a>
