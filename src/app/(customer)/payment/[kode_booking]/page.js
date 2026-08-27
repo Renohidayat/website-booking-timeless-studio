@@ -65,9 +65,7 @@ export default function PaymentPage() {
 
   if (loading || !user || !booking) return <div className="p-12 text-center min-h-[calc(100vh-72px)] text-studio-500">Memuat detail pembayaran...</div>;
 
-  const basePrice = booking.package?.price || 0;
-  const addOnsPrice = booking.addOns?.reduce((total, addon) => total + addon.price, 0) || 0;
-  const totalAmount = basePrice + addOnsPrice;
+  const totalAmount = booking.totalHarga || 0;
 
   // Jika sudah dibayar
   if (booking.status === "dibayar") {
