@@ -87,7 +87,7 @@ export default function PaymentPage() {
                   </label>
                   
                   <button onClick={handleUpload} disabled={!file || isSubmitting} className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide uppercase disabled:opacity-50">
-                      {isSubmitting ? "Uploading..." : "Confirm Payment"}
+                      {isSubmitting ? "Mengunggah..." : "Konfirmasi Pembayaran"}
                   </button>
               </div>
           </div>

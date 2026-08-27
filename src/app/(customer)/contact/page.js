@@ -18,8 +18,8 @@ export default function ContactPage() {
               </div>
               <h2 className="text-xl font-bold text-studio-900 mb-2">WhatsApp</h2>
               <p className="text-sm text-studio-500 mb-6">Hubungi admin kami untuk pertanyaan cepat (Fast Response).</p>
-              <a href="#" className="mt-auto bg-studio-900 text-white px-6 py-2 rounded-md hover:bg-studio-800 transition text-sm font-medium">
-                Chat Sekarang
+              <a href="https://wa.me/6281214898668" target="_blank" rel="noopener noreferrer" className="mt-auto bg-studio-900 text-white px-6 py-2 rounded-md hover:bg-studio-800 transition text-sm font-medium">
+                0812 1489 8668
               </a>
             </div>
             
@@ -39,8 +39,8 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-serif font-bold mb-2">Lokasi Studio</h2>
               <p className="text-studio-400 text-sm max-w-md leading-relaxed">
-                Jl. Kreatif No. 123, Kawasan Seni Terpadu, Jakarta Selatan.<br />
-                (Masuk dari gerbang utama, ruko sebelah kanan nomor 4)
+                Jl. Pangeran Santri No. 42,<br />
+                Sumedang, Jawa Barat, Indonesia.
               </p>
             </div>
             <div className="flex-shrink-0">
