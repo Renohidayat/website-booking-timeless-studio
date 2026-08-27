@@ -3,9 +3,18 @@
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 
 export default function Navbar() {
   const { user, role, logout, loading } = useAuth();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <nav className="bg-white border-b border-studio-200 sticky top-0 z-50 h-[72px] flex items-center">
@@ -23,24 +32,61 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-studio-600">
           <Link href="/" className="hover:text-studio-900 transition">Home</Link>
           <Link href="/packages" className="hover:text-studio-900 transition">Packages</Link>
-          {user && <Link href="/history" className="hover:text-studio-900 transition">My Ticket</Link>}
-          {role === "admin" && <Link href="/admin/dashboard" className="text-indigo-600 font-semibold hover:text-indigo-800 transition">Admin Panel</Link>}
         </div>
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           {!loading && user ? (
-             <div className="flex items-center gap-4">
-                <span className="hidden md:block text-xs font-medium text-studio-500">
-                  {user.email.split("@")[0]}
-                </span>
+            <>
+              <Link href="/booking" className="btn-primary text-xs md:text-sm px-6 py-2.5 rounded-sm font-medium tracking-wide">
+                Book Session
+              </Link>
+
+              {/* Profile Icon + Dropdown */}
+              <div className="relative" ref={menuRef}>
                 <button
-                  onClick={() => logout()}
-                  className="btn-outline text-xs px-4 py-2 rounded-sm font-medium tracking-wide"
+                  onClick={() => setOpen(!open)}
+                  className="w-9 h-9 rounded-full bg-studio-900 text-white flex items-center justify-center text-sm font-semibold uppercase hover:bg-studio-800 transition"
                 >
-                  Logout
+                  {user.email.charAt(0)}
                 </button>
-             </div>
+
+                {open && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-studio-200 rounded-sm shadow-lg py-2 z-50">
+                    {/* User info */}
+                    <div className="px-4 py-3 border-b border-studio-100">
+                      <p className="text-sm font-semibold text-studio-900 truncate">{user.displayName || user.email.split("@")[0]}</p>
+                      <p className="text-xs text-studio-400 truncate">{user.email}</p>
+                    </div>
+
+                    {/* Menu items */}
+                    <div className="py-1">
+                      <Link href="/history" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-studio-600 hover:bg-studio-50 hover:text-studio-900 transition">
+                        <i className="fa-solid fa-ticket w-4 text-center text-xs"></i> My Tickets
+                      </Link>
+                      <Link href="/booking" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-studio-600 hover:bg-studio-50 hover:text-studio-900 transition">
+                        <i className="fa-solid fa-camera w-4 text-center text-xs"></i> Book Session
+                      </Link>
+                      {role === "admin" && (
+                        <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition">
+                          <i className="fa-solid fa-gauge w-4 text-center text-xs"></i> Admin Panel
+                        </Link>
+                      )}
+                    </div>
+
+                    {/* Logout */}
+                    <div className="border-t border-studio-100 pt-1">
+                      <button
+                        onClick={() => { logout(); setOpen(false); }}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition w-full text-left"
+                      >
+                        <i className="fa-solid fa-right-from-bracket w-4 text-center text-xs"></i> Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <>
               <Link href="/login" className="text-xs md:text-sm font-medium text-studio-600 hover:text-studio-900 transition">
@@ -50,13 +96,6 @@ export default function Navbar() {
                 Book Session
               </Link>
             </>
-          )}
-          
-          {/* Default Book Button if user is logged in but not an admin */}
-          {user && role !== "admin" && (
-             <Link href="/booking" className="btn-primary text-xs md:text-sm px-6 py-2.5 rounded-sm font-medium tracking-wide">
-               Book Session
-             </Link>
           )}
         </div>
       </div>
