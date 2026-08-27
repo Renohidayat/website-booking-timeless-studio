@@ -28,9 +28,7 @@ export async function POST(request) {
     }
 
     // Hitung total (jika ada add-ons)
-    const basePrice = bookingData.package?.price || 0;
-    const addOnsPrice = bookingData.addOns?.reduce((total, addon) => total + addon.price, 0) || 0;
-    const totalAmount = basePrice + addOnsPrice;
+    const totalAmount = bookingData.totalHarga || 0;
 
     // Untuk development lokal webhook testing
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (request.headers.get("origin") || "http://localhost:3000");
