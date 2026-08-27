@@ -289,10 +289,10 @@ function BookingFlow() {
                             <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-200/50 pb-3 mb-5">Enhance Your Session</h3>
                             <div className="grid sm:grid-cols-2 gap-4">
                                 {services.map(s => (
-                                  <div key={s.id} className="flex flex-col justify-between p-4 bg-white border border-studio-200 rounded-xl shadow-sm hover:shadow-md hover:border-studio-300 transition-all">
+                                  <div key={s.id} className="flex flex-col justify-between p-4 bg-white border border-studio-900 rounded-xl shadow-sm hover:shadow-md hover:border-studio-900 transition-all">
                                       <div className="mb-4">
                                           <span className="text-sm font-bold text-studio-900 block">{s.namaLayanan}</span>
-                                          <span className="text-xs font-medium text-indigo-600">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>
+                                          <span className="text-xs font-medium text-studio-600">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>
                                       </div>
                                       <div className="flex items-center justify-between bg-studio-50 rounded-lg p-1">
                                           <button onClick={() => handleServiceChange(s.id, -1)} className="w-8 h-8 flex items-center justify-center rounded-md bg-white shadow-sm text-studio-600 hover:text-studio-900 hover:bg-studio-100 transition"><i className="fa-solid fa-minus text-xs"></i></button>
