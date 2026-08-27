@@ -18,7 +18,21 @@ export const dummySchedules = [
 export const getPackages = async () => {
   const q = query(collection(db, "packages"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map(doc => {
+    const data = doc.data();
+    return { 
+      id: doc.id,
+      id_paket: doc.id, 
+      nama_paket: data.namaPaket,
+      kategori: data.kategori,
+      harga_dasar: data.hargaDasar,
+      durasi_menit: data.durasiMenit,
+      maks_orang: data.maksOrang,
+      deskripsi: data.deskripsi,
+      isPopular: data.isPopular,
+      ...data
+    };
+  });
 };
 
 export const getPackageById = async (id) => {
@@ -41,12 +55,22 @@ export const getSchedules = async (tanggal) => {
   }
   
   const snapshot = await getDocs(q);
-  const schedules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const schedules = snapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id_jadwal: doc.id,
+      tanggal: data.tanggal,
+      jam_mulai: data.jamMulai,
+      jam_selesai: data.jamSelesai,
+      status_slot: data.statusSlot,
+      ...data
+    };
+  });
   
   // Sort by tanggal then by jamMulai in memory to avoid Firestore Composite Index requirements
   schedules.sort((a, b) => {
     if (a.tanggal === b.tanggal) {
-      return a.jamMulai.localeCompare(b.jamMulai);
+      return a.jam_mulai.localeCompare(b.jam_mulai);
     }
     return a.tanggal.localeCompare(b.tanggal);
   });
