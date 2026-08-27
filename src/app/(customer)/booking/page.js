@@ -50,13 +50,8 @@ function BookingFlow() {
       setPackages(pkgs);
       setServices(svcs);
       if (initialPaketId) {
-<<<<<<< Updated upstream
-        const pkg = pkgs.find(p => p.id_paket === Number(initialPaketId));
-        if (pkg) setSelectedPaket(pkg);
-=======
         const pkg = pkgs.find(p => String(p.id_paket) === String(initialPaketId) || String(p.id) === String(initialPaketId));
         setSelectedPaket(pkg || pkgs[0]);
->>>>>>> Stashed changes
       } else {
         // Default select the first package if none provided
         setSelectedPaket(pkgs[0]);
@@ -142,13 +137,8 @@ function BookingFlow() {
         namaPelanggan: name,
         email: email || "guest@example.com",
         noHp: phone,
-<<<<<<< Updated upstream
-        packageId: selectedPaket.id,
-        scheduleId: selectedSchedule.id,
-=======
         packageId: selectedPaket.id_paket || selectedPaket.id,
         scheduleId: selectedSchedule.id_jadwal || selectedSchedule.id,
->>>>>>> Stashed changes
         totalHarga: totalBayar
       });
       router.push(`/payment/${kodeBooking}`);
