@@ -44,7 +44,7 @@ export default function ContactPage() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <a href="#" className="inline-flex items-center gap-2 bg-white text-studio-900 px-6 py-3 rounded-md hover:bg-gray-100 transition font-medium text-sm">
+              <a href="https://www.google.com/maps/search/?api=1&query=Timeless+Self+Photo+Studio+Jl.+Pangeran+Santri+No.+42,+Sumedang" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-studio-900 px-6 py-3 rounded-md hover:bg-gray-100 transition font-medium text-sm">
                 <i className="fa-solid fa-map-location-dot"></i> Buka di Google Maps
               </a>
             </div>
