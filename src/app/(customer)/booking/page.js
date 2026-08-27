@@ -138,7 +138,8 @@ function BookingFlow() {
         email: email || "guest@example.com",
         noHp: phone,
         packageId: selectedPaket.id_paket || selectedPaket.id,
-        scheduleId: selectedSchedule.id_jadwal || selectedSchedule.id,
+        tanggal: selectedSchedule.tanggal,
+        jamMulai: selectedSchedule.jam_mulai,
         totalHarga: totalBayar
       });
       router.push(`/payment/${kodeBooking}`);

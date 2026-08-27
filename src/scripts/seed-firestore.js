@@ -19,32 +19,58 @@ const dummyPackages = [
   { namaPaket: "ID Photo", kategori: "Formal / ID", hargaDasar: 35000, durasiMenit: 10, maksOrang: 1, deskripsi: "Max 5 Best Shots, Prints (2x3, 3x4, 4x6), Retouched Soft File", isPopular: false },
 ];
 
-const dummySchedules = [
-  { tanggal: "2026-09-01", jamMulai: "09:00", jamSelesai: "09:30", statusSlot: "tersedia" },
-  { tanggal: "2026-09-01", jamMulai: "09:30", jamSelesai: "10:00", statusSlot: "dipesan" },
-  { tanggal: "2026-09-01", jamMulai: "10:00", jamSelesai: "10:30", statusSlot: "tersedia" },
-  { tanggal: "2026-09-02", jamMulai: "14:00", jamSelesai: "14:30", statusSlot: "tersedia" },
-  { tanggal: "2026-09-02", jamMulai: "14:30", jamSelesai: "15:00", statusSlot: "tidak_tersedia" },
-];
-
 async function seed() {
   console.log("Memulai seeding Firestore...");
-  const batch = writeBatch(db);
 
-  // Seed Packages
-  dummyPackages.forEach((pkg) => {
-    const ref = doc(collection(db, "packages"));
-    batch.set(ref, pkg);
-  });
+  const today = new Date();
+  
+  let batch = writeBatch(db);
+  let count = 0;
+  
+  // Generate Schedules from today for the next 60 days
+  for (let d = 0; d < 60; d++) {
+    const currentDate = new Date(today);
+    currentDate.setDate(today.getDate() + d);
+    const dateStr = currentDate.toISOString().split("T")[0];
+    
+    for (let h = 10; h <= 17; h++) {
+      for (let m of ["00", "30"]) {
+        const jamMulai = `${h.toString().padStart(2, '0')}:${m}`;
+        let endH = h;
+        let endM = "30";
+        if (m === "30") {
+           endH = h + 1;
+           endM = "00";
+        }
+        const jamSelesai = `${endH.toString().padStart(2, '0')}:${endM}`;
+        
+        const sch = {
+          tanggal: dateStr,
+          jamMulai,
+          jamSelesai,
+          statusSlot: "tersedia"
+        };
+        
+        const ref = doc(collection(db, "schedules"));
+        batch.set(ref, sch);
+        count++;
+        
+        if (count === 400) {
+           await batch.commit();
+           console.log("Committed a batch of 400 schedules...");
+           batch = writeBatch(db);
+           count = 0;
+        }
+      }
+    }
+  }
 
-  // Seed Schedules
-  dummySchedules.forEach((sch) => {
-    const ref = doc(collection(db, "schedules"));
-    batch.set(ref, sch);
-  });
+  if (count > 0) {
+    await batch.commit();
+    console.log(`Committed remaining ${count} schedules...`);
+  }
 
-  await batch.commit();
-  console.log("Seeding Firestore selesai!");
+  console.log("Seeding Firestore selesai untuk 2 bulan ke depan!");
   process.exit(0);
 }
 

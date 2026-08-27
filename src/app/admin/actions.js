@@ -35,15 +35,13 @@ export async function createBookingAction(data) {
     email: data.email,
     noHp: data.noHp,
     packageId: data.packageId,
-    scheduleId: data.scheduleId,
+    tanggal: data.tanggal,
+    jamMulai: data.jamMulai,
     totalHarga: data.totalHarga,
     status: "menunggu_pembayaran",
     createdAt: Date.now()
   });
   
-  await updateDoc(doc(db, "schedules", data.scheduleId), {
-    statusSlot: 'dipesan'
-  });
   revalidatePath('/admin/bookings');
 }
 

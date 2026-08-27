@@ -49,34 +49,58 @@ export const getAdditionalServices = async () => {
 };
 
 export const getSchedules = async (tanggal) => {
-  let q = query(collection(db, "schedules"));
-  if (tanggal) {
-    q = query(collection(db, "schedules"), where("tanggal", "==", tanggal));
-  }
+  if (!tanggal) return [];
   
-  const snapshot = await getDocs(q);
-  const schedules = snapshot.docs.map(doc => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      id_jadwal: doc.id,
-      tanggal: data.tanggal,
-      jam_mulai: data.jamMulai,
-      jam_selesai: data.jamSelesai,
-      status_slot: data.statusSlot,
-      ...data
-    };
-  });
-  
-  // Sort by tanggal then by jamMulai in memory to avoid Firestore Composite Index requirements
-  schedules.sort((a, b) => {
-    if (a.tanggal === b.tanggal) {
-      return a.jam_mulai.localeCompare(b.jam_mulai);
+  // 1. Generate slots
+  const slots = [];
+  for (let h = 10; h <= 17; h++) {
+    for (let m of ["00", "30"]) {
+      const jamMulai = `${h.toString().padStart(2, '0')}:${m}`;
+      let endH = h;
+      let endM = "30";
+      if (m === "30") {
+         endH = h + 1;
+         endM = "00";
+      }
+      const jamSelesai = `${endH.toString().padStart(2, '0')}:${endM}`;
+      const id = `${tanggal}-${jamMulai.replace(':', '')}`;
+      
+      slots.push({
+        id,
+        id_jadwal: id,
+        tanggal,
+        jam_mulai: jamMulai,
+        jamMulai,
+        jam_selesai: jamSelesai,
+        jamSelesai,
+        status_slot: "tersedia",
+        statusSlot: "tersedia"
+      });
     }
-    return a.tanggal.localeCompare(b.tanggal);
-  });
+  }
+
+  // 2. Fetch bookings for that date
+  const q = query(collection(db, "bookings"), where("tanggal", "==", tanggal));
+  const snapshot = await getDocs(q);
+  const bookedJamMulai = new Set();
   
-  return schedules;
+  snapshot.docs.forEach(doc => {
+    const data = doc.data();
+    if (data.status !== "dibatalkan" && data.status !== "kadaluarsa") {
+       if (data.jamMulai) {
+         bookedJamMulai.add(data.jamMulai);
+       }
+    }
+  });
+
+  // 3. Mark booked slots
+  return slots.map(slot => {
+    if (bookedJamMulai.has(slot.jamMulai)) {
+      slot.status_slot = "dipesan";
+      slot.statusSlot = "dipesan";
+    }
+    return slot;
+  });
 };
 
 export const getVouchers = async () => {
