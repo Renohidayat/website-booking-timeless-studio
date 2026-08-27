@@ -17,7 +17,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white border-b border-studio-900 sticky top-0 z-50 h-[72px] flex items-center">
+    <nav className="bg-white border-b border-studio-200 sticky top-0 z-50 h-[72px] flex items-center">
       <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Brand / Logo */}
         <Link href="/" className="flex items-center gap-3">
@@ -52,9 +52,9 @@ export default function Navbar() {
                 </button>
 
                 {open && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-studio-900 rounded-sm shadow-lg py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-studio-200 rounded-sm shadow-lg py-2 z-50">
                     {/* User info */}
-                    <div className="px-4 py-3 border-b border-studio-900">
+                    <div className="px-4 py-3 border-b border-studio-100">
                       <p className="text-sm font-semibold text-studio-900 truncate">{user.displayName || user.email.split("@")[0]}</p>
                       <p className="text-xs text-studio-400 truncate">{user.email}</p>
                     </div>
@@ -72,7 +72,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Logout */}
-                    <div className="border-t border-studio-900 pt-1">
+                    <div className="border-t border-studio-100 pt-1">
                       <button
                         onClick={() => { logout(); setOpen(false); }}
                         className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition w-full text-left"

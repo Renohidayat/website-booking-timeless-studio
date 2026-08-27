@@ -5,7 +5,7 @@ export default function PrivacyPage() {
     <>
       <Navbar />
       <div className="bg-studio-50 min-h-screen py-16 px-6">
-        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 shadow-sm border border-studio-900">
+        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 shadow-sm border border-studio-200">
           <h1 className="text-3xl font-serif font-bold text-studio-900 mb-8 border-b pb-4">Kebijakan Privasi</h1>
           
           <div className="space-y-8 text-studio-600 leading-relaxed">

@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
       
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Card 1 */}
-        <div className="bg-white border border-studio-900 p-6 rounded-sm shadow-sm hover:shadow-md transition">
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm hover:shadow-md transition">
           <div className="flex justify-between items-start mb-4">
              <div className="w-10 h-10 rounded bg-studio-100 flex items-center justify-center text-studio-900">
                 <i className="fa-solid fa-calendar-check"></i>
@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-white border border-studio-900 p-6 rounded-sm shadow-sm hover:shadow-md transition">
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm hover:shadow-md transition">
           <div className="flex justify-between items-start mb-4">
              <div className="w-10 h-10 rounded bg-studio-100 flex items-center justify-center text-studio-900">
                 <i className="fa-solid fa-clock"></i>
@@ -66,18 +66,18 @@ export default async function AdminDashboard() {
       </div>
       
       {/* Quick Actions */}
-      <div className="pt-8 border-t border-studio-900">
+      <div className="pt-8 border-t border-studio-200">
         <h2 className="text-lg font-serif font-semibold text-studio-900 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Link href="/admin/packages" className="flex flex-col items-center justify-center w-full border border-studio-900 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+          <Link href="/admin/packages" className="flex flex-col items-center justify-center w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
             <i className="fa-solid fa-box text-2xl text-studio-400 group-hover:text-studio-900 mb-3 transition"></i>
             <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Add Package</span>
           </Link>
-          <Link href="/admin/schedules" className="flex flex-col items-center justify-center w-full border border-studio-900 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+          <Link href="/admin/schedules" className="flex flex-col items-center justify-center w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
             <i className="fa-solid fa-clock text-2xl text-studio-400 group-hover:text-studio-900 mb-3 transition"></i>
             <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Operating Hours</span>
           </Link>
-          <Link href="/admin/vouchers" className="flex flex-col items-center justify-center w-full border border-studio-900 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
+          <Link href="/admin/vouchers" className="flex flex-col items-center justify-center w-full border border-studio-200 bg-white rounded-sm p-6 text-center hover:border-studio-900 transition group">
             <i className="fa-solid fa-ticket text-2xl text-studio-400 group-hover:text-studio-900 mb-3 transition"></i>
             <span className="text-xs font-medium text-studio-600 uppercase tracking-wider group-hover:text-studio-900 transition">Create Voucher</span>
           </Link>

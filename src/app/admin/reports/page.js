@@ -17,15 +17,15 @@ export default async function AdminReportsPage() {
       </div>
       
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <div className="bg-white border border-studio-900 p-6 rounded-sm shadow-sm">
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm">
           <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">Total Pendapatan Bersih</h3>
           <span className="text-3xl font-serif font-semibold text-studio-900">Rp {totalPendapatan.toLocaleString('id-ID')}</span>
         </div>
-        <div className="bg-white border border-studio-900 p-6 rounded-sm shadow-sm">
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm">
           <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">Menunggu Pembayaran</h3>
           <span className="text-3xl font-serif font-semibold text-studio-500">Rp {totalMenunggu.toLocaleString('id-ID')}</span>
         </div>
-        <div className="bg-white border border-studio-900 p-6 rounded-sm shadow-sm">
+        <div className="bg-white border border-studio-200 p-6 rounded-sm shadow-sm">
           <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">Total Transaksi</h3>
           <span className="text-3xl font-serif font-semibold text-studio-900">{bookings.length} Pesanan</span>
         </div>
@@ -34,7 +34,7 @@ export default async function AdminReportsPage() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-100 sm:rounded-lg">
+            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">
               <tr>

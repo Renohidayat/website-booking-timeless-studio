@@ -23,7 +23,7 @@ export default async function PackagesPage() {
               return (
                 <div key={pkg.id} className={isPopular 
                   ? "bg-studio-900 text-white p-8 border border-studio-900 flex flex-col justify-between relative shadow-lg transform md:-translate-y-4" 
-                  : "bg-white p-8 border border-studio-900 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"}>
+                  : "bg-white p-8 border border-studio-200 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"}>
                   
                   {isPopular && <div className="absolute top-0 right-0 bg-white text-studio-900 text-[9px] font-bold px-3 py-1 uppercase tracking-widest">Most Popular</div>}
                   

@@ -27,12 +27,12 @@ export default function SchedulesPage() {
           <p className="mt-4 text-lg text-gray-500">Cek slot waktu yang tersedia untuk sesi foto Anda.</p>
         </div>
 
-        <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm ring-1 ring-gray-900">
+        <div className="mt-8 bg-white p-6 rounded-2xl shadow-sm ring-1 ring-gray-200">
           <div className="mb-6">
             <label htmlFor="tanggal" className="block text-sm font-medium text-gray-700">Pilih Tanggal</label>
             <input
               type="date" id="tanggal"
-              className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
               value={tanggal}
               onChange={(e) => setTanggal(e.target.value)}
             />
@@ -51,7 +51,7 @@ export default function SchedulesPage() {
                     s.status_slot === "tersedia" 
                       ? "border-green-200 bg-green-50 text-green-700" 
                       : s.status_slot === "dipesan" 
-                      ? "border-gray-900 bg-gray-50 text-gray-400"
+                      ? "border-gray-200 bg-gray-50 text-gray-400"
                       : "border-red-200 bg-red-50 text-red-700"
                   }`}
                 >
