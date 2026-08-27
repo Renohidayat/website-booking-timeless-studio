@@ -152,7 +152,7 @@ export function VerifyPaymentButton({ id }) {
   };
 
   return (
-    <button onClick={handleClick} disabled={isPending} className="text-indigo-600 hover:text-indigo-900 font-medium text-sm disabled:opacity-50">
+    <button onClick={handleClick} disabled={isPending} className="text-studio-900 hover:text-studio-600 font-medium text-sm disabled:opacity-50">
       {isPending ? "Memproses..." : "Verifikasi Bayar"}
     </button>
   );
@@ -184,7 +184,7 @@ export function CreatePackageButton() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-studio-900 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-studio-800">
         Tambah Paket
       </button>
       <Modal title="Tambah Paket Baru" isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -231,7 +231,7 @@ export function EditPackageButton({ pkg }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-studio-900 hover:text-studio-600">Edit</button>
       <Modal title="Edit Paket" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div><FieldLabel>Nama Paket</FieldLabel><Input name="namaPaket" required defaultValue={pkg.namaPaket} /></div>
@@ -274,7 +274,7 @@ export function CreateServiceButton() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-studio-900 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-studio-800">
         Tambah Layanan
       </button>
       <Modal title="Tambah Layanan Baru" isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -306,7 +306,7 @@ export function EditServiceButton({ svc }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-studio-900 hover:text-studio-600 mr-4">Edit</button>
       <Modal title="Edit Layanan" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div><FieldLabel>Nama Layanan</FieldLabel><Input name="namaLayanan" required defaultValue={svc.namaLayanan} /></div>
@@ -374,7 +374,7 @@ export function CreateVoucherButton() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+      <button onClick={() => setIsOpen(true)} type="button" className="block rounded-md bg-studio-900 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-studio-800">
         Tambah Voucher
       </button>
       <Modal title="Tambah Voucher Baru" isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -422,7 +422,7 @@ export function EditVoucherButton({ voucher }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-studio-900 hover:text-studio-600 mr-4">Edit</button>
       <Modal title="Edit Voucher" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div><FieldLabel>Kode Voucher</FieldLabel><Input name="kodeVoucher" required defaultValue={voucher.kodeVoucher} /></div>

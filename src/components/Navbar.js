@@ -65,7 +65,7 @@ export default function Navbar() {
                         <i className="fa-solid fa-ticket w-4 text-center text-xs"></i> My Tickets
                       </Link>
                       {role === "admin" && (
-                        <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition">
+                        <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-studio-900 hover:bg-studio-100 hover:text-studio-800 transition">
                           <i className="fa-solid fa-gauge w-4 text-center text-xs"></i> Admin Panel
                         </Link>
                       )}
