@@ -202,7 +202,7 @@ function BookingFlow() {
                                 value={selectedDate} 
                                 onChange={(e) => { setSelectedDate(e.target.value); setSelectedSchedule(null); }}
                                 min={new Date().toISOString().split("T")[0]}
-                                className="w-full bg-white border border-studio-200 p-4 pl-12 text-sm text-studio-900 font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" 
+                                className="w-full bg-white border border-studio-900 p-4 pl-12 text-sm text-studio-900 font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" 
                               />
                               <i className="fa-regular fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-studio-400 group-hover:text-studio-900 transition-colors"></i>
                             </div>
@@ -232,7 +232,7 @@ function BookingFlow() {
                                       className={`relative overflow-hidden p-4 border text-sm font-semibold text-center transition-all duration-300 rounded-xl hover:-translate-y-1 hover:shadow-lg
                                         ${selectedSchedule?.id === s.id 
                                           ? 'bg-studio-900 text-white border-studio-900 shadow-md scale-[1.02]' 
-                                          : 'border-studio-200 hover:border-studio-400 text-studio-900 bg-white/50 backdrop-blur-sm'
+                                          : 'border-studio-900 hover:border-studio-400 text-studio-900 bg-white/50 backdrop-blur-sm'
                                         }`}
                                     >
                                       {s.jamMulai} - {s.jamSelesai}
@@ -246,7 +246,7 @@ function BookingFlow() {
                         </div>
                     </div>
 
-                    <div className="flex justify-between items-center pt-8 mt-8 border-t border-studio-200/50">
+                    <div className="flex justify-between items-center pt-8 mt-8 border-t border-studio-900/50">
                         <button onClick={() => router.push('/packages')} className="group flex items-center gap-2 text-sm font-semibold text-studio-500 hover:text-studio-900 transition-colors">
                             <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> Back to Packages
                         </button>
@@ -267,29 +267,29 @@ function BookingFlow() {
                     <div className="space-y-6">
                         {/* Personal Info */}
                         <div className="bg-white/40 p-6 rounded-2xl border border-white/60 space-y-5">
-                          <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-200/50 pb-3">Personal Information</h3>
+                          <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-900/50 pb-3">Personal Information</h3>
                           <div className="grid md:grid-cols-2 gap-5">
                             <div>
                                 <label className="block text-xs font-semibold text-studio-600 mb-2">Full Name</label>
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white border border-studio-900 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-studio-600 mb-2">Phone Number</label>
-                                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="08..." className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
+                                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="08..." className="w-full bg-white border border-studio-900 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
                             </div>
                             <div className="md:col-span-2">
                                 <label className="block text-xs font-semibold text-studio-600 mb-2">Email Address</label>
-                                <input type="email" value={email} disabled className="w-full bg-studio-50/50 border border-studio-200 p-3.5 text-sm font-medium text-studio-500 rounded-xl cursor-not-allowed opacity-80" />
+                                <input type="email" value={email} disabled className="w-full bg-studio-50/50 border border-studio-900 p-3.5 text-sm font-medium text-studio-500 rounded-xl cursor-not-allowed opacity-80" />
                             </div>
                           </div>
                         </div>
 
                         {/* Add-ons */}
                         <div className="bg-white/40 p-6 rounded-2xl border border-white/60">
-                            <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-200/50 pb-3 mb-5">Enhance Your Session</h3>
+                            <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-900/50 pb-3 mb-5">Enhance Your Session</h3>
                             <div className="grid sm:grid-cols-2 gap-4">
                                 {services.map(s => (
-                                  <div key={s.id} className="flex flex-col justify-between p-4 bg-white border border-studio-200 rounded-xl shadow-sm hover:shadow-md hover:border-studio-300 transition-all">
+                                  <div key={s.id} className="flex flex-col justify-between p-4 bg-white border border-studio-900 rounded-xl shadow-sm hover:shadow-md hover:border-studio-300 transition-all">
                                       <div className="mb-4">
                                           <span className="text-sm font-bold text-studio-900 block">{s.namaLayanan}</span>
                                           <span className="text-xs font-medium text-indigo-600">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>

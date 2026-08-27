@@ -32,12 +32,12 @@ export default function FAQPage() {
     <>
       <Navbar />
       <div className="bg-studio-50 min-h-screen py-16 px-6">
-        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 shadow-sm border border-studio-200">
+        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 shadow-sm border border-studio-900">
           <h1 className="text-3xl font-serif font-bold text-studio-900 mb-8 border-b pb-4 text-center">Tanya Jawab (FAQ)</h1>
           
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="border border-studio-200 rounded-md overflow-hidden">
+              <div key={index} className="border border-studio-900 rounded-md overflow-hidden">
                 <button 
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                   className="w-full px-6 py-4 text-left font-bold text-studio-900 bg-studio-50 hover:bg-studio-100 transition flex justify-between items-center"
