@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
              <span className="text-2xl font-serif font-semibold text-studio-900">{todaysBookings}</span>
           </div>
           <h3 className="text-sm font-medium text-studio-500 uppercase tracking-wider mb-1">Today's Bookings</h3>
-          <Link href="/admin/bookings" className="text-xs font-semibold text-studio-900 hover:underline">Manage schedule &rarr;</Link>
+          <Link href="/admin/bookings" className="text-xs font-semibold text-studio-900 hover:underline">View bookings &rarr;</Link>
         </div>
 
         {/* Card 3 */}
