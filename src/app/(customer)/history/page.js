@@ -63,10 +63,27 @@ export default function HistoryPage() {
                                 onClick={() => {
                                   const style = document.createElement('style');
                                   style.innerHTML = `
+                                    @page { size: portrait; margin: 20mm; }
                                     @media print {
+                                      body { background: white !important; }
                                       body * { visibility: hidden; }
                                       #ticket-${item.id}, #ticket-${item.id} * { visibility: visible; }
-                                      #ticket-${item.id} { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+                                      #ticket-${item.id} { 
+                                        position: absolute; left: 0; top: 0; width: 100%; 
+                                        box-shadow: none !important; 
+                                        border: 2px solid #18181b !important; 
+                                        border-radius: 8px;
+                                        -webkit-print-color-adjust: exact; 
+                                        print-color-adjust: exact;
+                                      }
+                                      #ticket-${item.id} button { display: none !important; }
+                                      #ticket-${item.id}::before {
+                                        content: 'TIMELESS STUDIO - OFFICIAL E-TICKET';
+                                        display: block; text-align: center; font-size: 24px;
+                                        font-weight: 700; font-family: serif; letter-spacing: 2px;
+                                        margin: 20px; padding-bottom: 20px; border-bottom: 2px solid #18181b;
+                                      }
+                                      #ticket-${item.id} .absolute { display: none !important; }
                                     }
                                   `;
                                   document.head.appendChild(style);
