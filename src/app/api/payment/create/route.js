@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase/config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { createTransaction } from "@/lib/ronzzpay";
 
 export async function POST(request) {
@@ -12,14 +12,16 @@ export async function POST(request) {
     }
 
     // Ambil data booking
-    const bookingRef = doc(db, "bookings", kode_booking);
-    const bookingSnap = await getDoc(bookingRef);
+    const q = query(collection(db, "bookings"), where("kodeBooking", "==", kode_booking));
+    const querySnapshot = await getDocs(q);
 
-    if (!bookingSnap.exists()) {
+    if (querySnapshot.empty) {
       return NextResponse.json({ success: false, message: "Booking not found" }, { status: 404 });
     }
 
-    const bookingData = bookingSnap.data();
+    const bookingDoc = querySnapshot.docs[0];
+    const bookingRef = doc(db, "bookings", bookingDoc.id);
+    const bookingData = bookingDoc.data();
 
     if (bookingData.status === "dibayar") {
       return NextResponse.json({ success: false, message: "Booking is already paid" }, { status: 400 });

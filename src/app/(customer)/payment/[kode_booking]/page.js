@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 export default function PaymentPage() {
@@ -27,8 +27,10 @@ export default function PaymentPage() {
 
     if (kode_booking) {
       // Listen to booking changes for real-time payment status update
-      const unsub = onSnapshot(doc(db, "bookings", kode_booking), (docSnap) => {
-        if (docSnap.exists()) {
+      const q = query(collection(db, "bookings"), where("kodeBooking", "==", kode_booking));
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const docSnap = querySnapshot.docs[0];
           setBooking({ id: docSnap.id, ...docSnap.data() });
         }
       });
