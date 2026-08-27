@@ -18,6 +18,7 @@ export default function AdminLayout({ children }) {
     { name: "Schedules", href: "/admin/schedules" },
     { name: "Vouchers", href: "/admin/vouchers" },
     { name: "Reports", href: "/admin/reports" },
+    { name: "Manajemen Admin", href: "/admin/users" },
   ];
 
   return (
