@@ -63,7 +63,7 @@ function BookingFlow() {
 
   useEffect(() => {
     if (selectedDate) {
-      getSchedules(selectedDate).then(data => setSchedules(data.filter(s => s.status_slot === "tersedia")));
+      getSchedules(selectedDate).then(data => setSchedules(data.filter(s => s.statusSlot === "tersedia")));
     } else {
       setSchedules([]);
     }
