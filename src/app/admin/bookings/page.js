@@ -1,5 +1,4 @@
 import { getBookings } from "@/lib/data";
-import { VerifyPaymentButton } from "@/components/AdminActions";
 
 export default async function AdminBookingsPage() {
   const bookings = await getBookings();
@@ -50,7 +49,11 @@ export default async function AdminBookingsPage() {
                     </span>
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    {b.status === 'menunggu_pembayaran' && <VerifyPaymentButton id={b.id} />}
+                    {b.status === 'menunggu_pembayaran' ? (
+                      <span className="text-xs text-gray-400 italic">Menunggu Otomatis (Webhook)</span>
+                    ) : (
+                      <span className="text-xs text-green-600 font-semibold"><i className="fa-solid fa-check mr-1"></i> Terverifikasi Otomatis</span>
+                    )}
                   </td>
                 </tr>
               ))}
