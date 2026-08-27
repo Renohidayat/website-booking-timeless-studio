@@ -15,9 +15,14 @@ import {
 function Modal({ title, isOpen, onClose, children }) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white p-8 max-w-md w-full rounded-sm shadow-xl">
-        <h3 className="text-lg font-serif font-bold text-studio-900 mb-4">{title}</h3>
+    <div className="fixed inset-0 bg-studio-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
+      <div className="bg-white p-8 max-w-md w-full rounded-2xl shadow-2xl border border-studio-100 animate-in zoom-in-95 duration-300">
+        <div className="flex justify-between items-center mb-6">
+           <h3 className="text-xl font-serif font-bold text-studio-900">{title}</h3>
+           <button onClick={onClose} type="button" className="w-8 h-8 rounded-full bg-studio-50 hover:bg-studio-100 flex items-center justify-center text-studio-500 transition-colors">
+              <i className="fa-solid fa-xmark"></i>
+           </button>
+        </div>
         {children}
       </div>
     </div>
@@ -25,18 +30,18 @@ function Modal({ title, isOpen, onClose, children }) {
 }
 
 function FieldLabel({ children }) {
-  return <label className="block text-xs uppercase tracking-wider text-studio-500 mb-1">{children}</label>;
+  return <label className="block text-xs font-bold uppercase tracking-wider text-studio-500 mb-2">{children}</label>;
 }
 
 function Input({ type = "text", ...props }) {
-  return <input type={type} className="w-full ring-1 ring-gray-200 rounded-sm p-2 text-sm outline-none focus:ring-studio-900" {...props} />;
+  return <input type={type} className="w-full bg-studio-50 border border-studio-200 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" {...props} />;
 }
 
 function ModalButtons({ onClose, isPending, label = "Simpan" }) {
   return (
-    <div className="flex gap-3 pt-4">
-      <button type="button" onClick={onClose} className="w-full py-2 border border-studio-200 rounded-sm text-xs font-semibold uppercase tracking-wider">Batal</button>
-      <button type="submit" disabled={isPending} className="btn-primary w-full py-2 rounded-sm text-xs font-semibold uppercase tracking-wider disabled:opacity-50">
+    <div className="flex gap-4 pt-6 mt-6 border-t border-studio-100">
+      <button type="button" onClick={onClose} className="w-full py-3.5 bg-white border border-studio-200 hover:bg-studio-50 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors">Batal</button>
+      <button type="submit" disabled={isPending} className="btn-primary w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-studio-900/20 hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0">
         {isPending ? "Menyimpan..." : label}
       </button>
     </div>
