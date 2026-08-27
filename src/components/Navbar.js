@@ -17,7 +17,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white border-b border-studio-200 sticky top-0 z-50 h-[72px] flex items-center">
+    <nav className="bg-white border-b border-studio-900 sticky top-0 z-50 h-[72px] flex items-center shadow-sm">
       <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Brand / Logo */}
         <Link href="/" className="flex items-center gap-3">
