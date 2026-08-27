@@ -33,7 +33,7 @@ export default async function AdminVouchersPage() {
             <tbody className="divide-y divide-gray-200 bg-white">
               {vouchers.map((v) => (
                 <tr key={v.id}>
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-indigo-600">{v.kodeVoucher}</td>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-studio-900">{v.kodeVoucher}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {v.tipeDiskon === 'persen' ? `${v.nilaiDiskon}%` : `Rp ${v.nilaiDiskon?.toLocaleString('id-ID')}`}
                   </td>
