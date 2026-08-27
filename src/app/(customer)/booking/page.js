@@ -50,8 +50,13 @@ function BookingFlow() {
       setPackages(pkgs);
       setServices(svcs);
       if (initialPaketId) {
+<<<<<<< Updated upstream
         const pkg = pkgs.find(p => p.id_paket === Number(initialPaketId));
         if (pkg) setSelectedPaket(pkg);
+=======
+        const pkg = pkgs.find(p => String(p.id_paket) === String(initialPaketId) || String(p.id) === String(initialPaketId));
+        setSelectedPaket(pkg || pkgs[0]);
+>>>>>>> Stashed changes
       } else {
         // Default select the first package if none provided
         setSelectedPaket(pkgs[0]);
@@ -74,8 +79,8 @@ function BookingFlow() {
   // Kalkulasi
   const subtotalPaket = selectedPaket ? selectedPaket.harga_dasar : 0;
   const subtotalLayanan = Object.entries(selectedServices).reduce((sum, [id, qty]) => {
-    const svc = services.find(s => s.id_layanan === Number(id));
-    return sum + (svc ? svc.harga_satuan * qty : 0);
+    const svc = services.find(s => String(s.id) === String(id) || String(s.id_layanan) === String(id));
+    return sum + (svc ? svc.hargaSatuan * qty : 0);
   }, 0);
   const totalSebelumDiskon = subtotalPaket + subtotalLayanan;
   
@@ -124,6 +129,11 @@ function BookingFlow() {
       alert("Please fill in your name and phone number.");
       return;
     }
+    if (!selectedPaket || !selectedSchedule) {
+      alert("Terjadi kesalahan: Paket atau jadwal belum dipilih.");
+      return;
+    }
+    
     const kodeBooking = `BKG-${Date.now().toString().slice(-6)}`;
     
     try {
@@ -132,8 +142,13 @@ function BookingFlow() {
         namaPelanggan: name,
         email: email || "guest@example.com",
         noHp: phone,
+<<<<<<< Updated upstream
         packageId: selectedPaket.id,
         scheduleId: selectedSchedule.id,
+=======
+        packageId: selectedPaket.id_paket || selectedPaket.id,
+        scheduleId: selectedSchedule.id_jadwal || selectedSchedule.id,
+>>>>>>> Stashed changes
         totalHarga: totalBayar
       });
       router.push(`/payment/${kodeBooking}`);
