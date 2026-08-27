@@ -1,5 +1,5 @@
 import { getPackages, getAdditionalServices } from "@/lib/data";
-import { CreatePackageButton, EditPackageButton, CreateServiceButton, EditServiceButton } from "@/components/AdminActions";
+import { CreatePackageButton, EditPackageButton, DeletePackageButton, CreateServiceButton, EditServiceButton, DeleteServiceButton } from "@/components/AdminActions";
 
 export default async function AdminPackagesPage() {
   const packages = await getPackages();
@@ -40,6 +40,8 @@ export default async function AdminPackagesPage() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.maksOrang}</td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <EditPackageButton pkg={pkg} />
+                          <span className="mx-2 text-gray-300">|</span>
+                          <DeletePackageButton id={pkg.id} />
                         </td>
                       </tr>
                     ))}
@@ -77,6 +79,8 @@ export default async function AdminPackagesPage() {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {svc.hargaSatuan?.toLocaleString('id-ID')}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <EditServiceButton svc={svc} />
+                      <span className="mx-2 text-gray-300">|</span>
+                      <DeleteServiceButton id={svc.id} />
                     </td>
                   </tr>
                 ))}

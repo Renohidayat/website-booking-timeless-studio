@@ -306,7 +306,7 @@ export function EditServiceButton({ svc }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
       <Modal title="Edit Layanan" isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div><FieldLabel>Nama Layanan</FieldLabel><Input name="namaLayanan" required defaultValue={svc.namaLayanan} /></div>
@@ -315,6 +315,38 @@ export function EditServiceButton({ svc }) {
         </form>
       </Modal>
     </>
+  );
+}
+
+export function DeleteServiceButton({ id }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus layanan ini?")) {
+      startTransition(() => deleteServiceAction(id));
+    }
+  };
+
+  return (
+    <button onClick={handleDelete} disabled={isPending} className="text-red-600 hover:text-red-900 disabled:opacity-50">
+      {isPending ? "..." : "Hapus"}
+    </button>
+  );
+}
+
+export function DeletePackageButton({ id }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus paket ini?")) {
+      startTransition(() => deletePackageAction(id));
+    }
+  };
+
+  return (
+    <button onClick={handleDelete} disabled={isPending} className="text-red-600 hover:text-red-900 disabled:opacity-50">
+      {isPending ? "..." : "Hapus"}
+    </button>
   );
 }
 

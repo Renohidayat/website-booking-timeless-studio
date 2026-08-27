@@ -86,7 +86,7 @@ export async function deletePackageAction(id) {
 
 // === ADDITIONAL SERVICES ===
 export async function createServiceAction(data) {
-  await addDoc(collection(db, "additionalServices"), {
+  await addDoc(collection(db, "services"), {
     namaLayanan: data.namaLayanan,
     hargaSatuan: Number(data.hargaSatuan)
   });
@@ -94,7 +94,7 @@ export async function createServiceAction(data) {
 }
 
 export async function updateServiceAction(id, data) {
-  await updateDoc(doc(db, "additionalServices", id), {
+  await updateDoc(doc(db, "services", id), {
     namaLayanan: data.namaLayanan,
     hargaSatuan: Number(data.hargaSatuan)
   });
@@ -102,7 +102,7 @@ export async function updateServiceAction(id, data) {
 }
 
 export async function deleteServiceAction(id) {
-  await deleteDoc(doc(db, "additionalServices", id));
+  await deleteDoc(doc(db, "services", id));
   revalidatePath("/admin/packages");
 }
 
