@@ -64,9 +64,6 @@ export default function Navbar() {
                       <Link href="/history" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-studio-600 hover:bg-studio-50 hover:text-studio-900 transition">
                         <i className="fa-solid fa-ticket w-4 text-center text-xs"></i> My Tickets
                       </Link>
-                      <Link href="/booking" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-studio-600 hover:bg-studio-50 hover:text-studio-900 transition">
-                        <i className="fa-solid fa-camera w-4 text-center text-xs"></i> Book Session
-                      </Link>
                       {role === "admin" && (
                         <Link href="/admin/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition">
                           <i className="fa-solid fa-gauge w-4 text-center text-xs"></i> Admin Panel
