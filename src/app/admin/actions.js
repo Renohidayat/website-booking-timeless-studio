@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/firebase/config";
-import { collection, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, getDocs } from "firebase/firestore";
 
 // === SCHEDULES ===
 export async function deleteScheduleAction(id) {
@@ -29,6 +29,23 @@ export async function updateScheduleAction(id, data) {
 
 // === BOOKINGS ===
 export async function createBookingAction(data) {
+  // Cegah double-booking dengan mengecek apakah sudah ada booking di tanggal dan jam yang sama
+  const q = query(
+    collection(db, "bookings"),
+    where("tanggal", "==", data.tanggal),
+    where("jamMulai", "==", data.jamMulai)
+  );
+  
+  const snapshot = await getDocs(q);
+  const isBooked = snapshot.docs.some(doc => {
+    const status = doc.data().status;
+    return status !== "dibatalkan" && status !== "kadaluarsa";
+  });
+
+  if (isBooked) {
+    throw new Error("Jadwal ini sudah dipesan oleh orang lain.");
+  }
+
   await addDoc(collection(db, "bookings"), {
     kodeBooking: data.kodeBooking,
     namaPelanggan: data.namaPelanggan,
@@ -43,14 +60,7 @@ export async function createBookingAction(data) {
     createdAt: Date.now()
   });
   
-  if (data.scheduleId) {
-    await updateDoc(doc(db, "schedules", data.scheduleId), {
-      statusSlot: "dipesan"
-    });
-  }
-  
   revalidatePath('/admin/bookings');
-  revalidatePath('/admin/schedules');
 }
 
 export async function updateBookingStatusAction(id, status) {

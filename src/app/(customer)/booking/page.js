@@ -146,7 +146,7 @@ function BookingFlow() {
       router.push(`/payment/${kodeBooking}`);
     } catch (err) {
       console.error(err);
-      alert("Terjadi kesalahan saat membuat booking.");
+      alert(err.message || "Terjadi kesalahan saat membuat booking.");
     }
   };
 
