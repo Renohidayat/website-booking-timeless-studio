@@ -72,7 +72,7 @@ function BookingFlow() {
   if (loading || authLoading || !user) return <div className="p-12 text-center min-h-[calc(100vh-72px)]">Memuat...</div>;
 
   // Kalkulasi
-  const subtotalPaket = selectedPaket ? selectedPaket.harga_dasar : 0;
+  const subtotalPaket = selectedPaket ? selectedPaket.hargaDasar : 0;
   const subtotalLayanan = Object.entries(selectedServices).reduce((sum, [id, qty]) => {
     const svc = services.find(s => String(s.id) === String(id) || String(s.id_layanan) === String(id));
     return sum + (svc ? svc.hargaSatuan * qty : 0);
@@ -81,8 +81,8 @@ function BookingFlow() {
   
   let diskon = 0;
   if (appliedVoucher) {
-    if (appliedVoucher.tipe_diskon === "persen") diskon = totalSebelumDiskon * (appliedVoucher.nilai_diskon / 100);
-    else diskon = appliedVoucher.nilai_diskon;
+    if (appliedVoucher.tipeDiskon === "persen") diskon = totalSebelumDiskon * (appliedVoucher.nilaiDiskon / 100);
+    else diskon = appliedVoucher.nilaiDiskon;
   }
   const totalBayar = Math.max(0, totalSebelumDiskon - diskon);
 
@@ -158,7 +158,7 @@ function BookingFlow() {
                 <div className="border-b border-studio-200 pb-6">
                     <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Step 1 of 3</span>
                     <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Select Date & Time</h2>
-                    {selectedPaket && <p className="mt-2 text-sm text-studio-600 font-medium">Package: {selectedPaket.nama_paket}</p>}
+                    {selectedPaket && <p className="mt-2 text-sm text-studio-600 font-medium">Package: {selectedPaket.namaPaket}</p>}
                 </div>
 
                 <div className="space-y-8">
@@ -188,11 +188,11 @@ function BookingFlow() {
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                               {schedules.map(s => (
                                 <button 
-                                  key={s.id_jadwal}
+                                  key={s.id}
                                   onClick={() => setSelectedSchedule(s)} 
-                                  className={`p-3 border text-sm font-medium text-center transition rounded-sm ${selectedSchedule?.id_jadwal === s.id_jadwal ? 'bg-studio-900 text-white border-studio-900' : 'border-studio-200 hover:border-studio-900 text-studio-900 bg-white'}`}
+                                  className={`p-3 border text-sm font-medium text-center transition rounded-sm ${selectedSchedule?.id === s.id ? 'bg-studio-900 text-white border-studio-900' : 'border-studio-200 hover:border-studio-900 text-studio-900 bg-white'}`}
                                 >
-                                  {s.jam_mulai} - {s.jam_selesai}
+                                  {s.jamMulai} - {s.jamSelesai}
                                 </button>
                               ))}
                           </div>
@@ -243,15 +243,15 @@ function BookingFlow() {
                             <h4 className="text-sm font-medium text-studio-900 mb-4">Add-ons</h4>
                             <div className="space-y-3">
                                 {services.map(s => (
-                                  <div key={s.id_layanan} className="flex items-center justify-between p-4 bg-white border border-studio-200 rounded-sm">
+                                  <div key={s.id} className="flex items-center justify-between p-4 bg-white border border-studio-200 rounded-sm">
                                       <div>
-                                          <span className="text-sm font-medium text-studio-900 block">{s.nama_layanan}</span>
-                                          <span className="text-xs text-studio-500">+Rp {s.harga_satuan.toLocaleString('id-ID')}</span>
+                                          <span className="text-sm font-medium text-studio-900 block">{s.namaLayanan}</span>
+                                          <span className="text-xs text-studio-500">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>
                                       </div>
                                       <div className="flex items-center gap-3">
-                                          <button onClick={() => handleServiceChange(s.id_layanan, -1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">-</button>
-                                          <span className="text-sm font-medium w-4 text-center">{selectedServices[s.id_layanan] || 0}</span>
-                                          <button onClick={() => handleServiceChange(s.id_layanan, 1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">+</button>
+                                          <button onClick={() => handleServiceChange(s.id, -1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">-</button>
+                                          <span className="text-sm font-medium w-4 text-center">{selectedServices[s.id] || 0}</span>
+                                          <button onClick={() => handleServiceChange(s.id, 1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">+</button>
                                       </div>
                                   </div>
                                 ))}
@@ -268,7 +268,7 @@ function BookingFlow() {
                         <div className="space-y-3 text-sm mb-6 border-b border-studio-200 pb-6">
                             <div className="flex justify-between">
                                 <span className="text-studio-500">Package</span>
-                                <span className="font-medium text-studio-900">{selectedPaket?.nama_paket || "-"}</span>
+                                <span className="font-medium text-studio-900">{selectedPaket?.namaPaket || "-"}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-studio-500">Date</span>
@@ -276,7 +276,7 @@ function BookingFlow() {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-studio-500">Time</span>
-                                <span className="font-medium text-studio-900">{selectedSchedule?.jam_mulai || "-"}</span>
+                                <span className="font-medium text-studio-900">{selectedSchedule?.jamMulai || "-"}</span>
                             </div>
                         </div>
 
