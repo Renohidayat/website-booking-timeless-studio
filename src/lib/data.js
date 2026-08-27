@@ -130,3 +130,24 @@ export const getBookingById = async (kode) => {
   }
   return b;
 };
+
+export const getBookingsByEmail = async (email) => {
+  const q = query(collection(db, "bookings"), where("email", "==", email), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+  const bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  // Manual join for Package and Schedule
+  for (let b of bookings) {
+    if (b.packageId) {
+      const pkg = await getPackageById(b.packageId);
+      b.package = pkg || { namaPaket: "Unknown Package", kategori: "-" };
+    }
+    if (b.scheduleId) {
+      const schRef = doc(db, "schedules", b.scheduleId);
+      const schSnap = await getDoc(schRef);
+      b.schedule = schSnap.exists() ? { id: schSnap.id, ...schSnap.data() } : { tanggal: "-", jamMulai: "-", jamSelesai: "-" };
+    }
+  }
+  
+  return bookings;
+};
