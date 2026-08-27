@@ -132,9 +132,12 @@ export const getBookingById = async (kode) => {
 };
 
 export const getBookingsByEmail = async (email) => {
-  const q = query(collection(db, "bookings"), where("email", "==", email), orderBy("createdAt", "desc"));
+  const q = query(collection(db, "bookings"), where("email", "==", email));
   const snapshot = await getDocs(q);
   const bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  // Sort in-memory to avoid Firestore composite index requirements
+  bookings.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
   
   // Manual join for Package and Schedule
   for (let b of bookings) {
