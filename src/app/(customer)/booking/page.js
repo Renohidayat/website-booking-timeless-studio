@@ -6,6 +6,7 @@ import { getPackages, getAdditionalServices, getSchedules, checkVoucherKode } fr
 import { createBookingAction } from "@/app/admin/actions";
 import { useAuth } from "@/lib/auth-context";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 function BookingFlow() {
   const searchParams = useSearchParams();
@@ -39,7 +40,6 @@ function BookingFlow() {
       router.push("/login");
     } else if (user) {
        setEmail(user.email);
-       // Split email for default name
        setName(user.email.split("@")[0]);
     }
   }, [user, authLoading, router]);
@@ -53,7 +53,6 @@ function BookingFlow() {
         const pkg = pkgs.find(p => String(p.id_paket) === String(initialPaketId) || String(p.id) === String(initialPaketId));
         setSelectedPaket(pkg || pkgs[0]);
       } else {
-        // Default select the first package if none provided
         setSelectedPaket(pkgs[0]);
       }
       setLoading(false);
@@ -69,7 +68,7 @@ function BookingFlow() {
     }
   }, [selectedDate]);
 
-  if (loading || authLoading || !user) return <div className="p-12 text-center min-h-[calc(100vh-72px)]">Memuat...</div>;
+  if (loading || authLoading || !user) return <div className="flex h-screen items-center justify-center bg-studio-50"><div className="w-8 h-8 border-4 border-studio-900 border-t-transparent rounded-full animate-spin"></div></div>;
 
   // Kalkulasi
   const subtotalPaket = selectedPaket ? selectedPaket.hargaDasar : 0;
@@ -88,6 +87,7 @@ function BookingFlow() {
 
   const handleApplyVoucher = async () => {
     setVoucherError("");
+    if (!voucherCode) return;
     const v = await checkVoucherKode(voucherCode);
     if (v) {
       setAppliedVoucher(v);
@@ -152,183 +152,242 @@ function BookingFlow() {
     <>
       <Navbar />
       
-      {step === 1 && (
-        <section className="flex-col p-6 lg:p-12 bg-white min-h-[calc(100vh-72px)]">
-            <div className="max-w-3xl mx-auto w-full space-y-8 pt-8">
-                <div className="border-b border-studio-200 pb-6">
-                    <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Step 1 of 3</span>
-                    <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Select Date & Time</h2>
-                    {selectedPaket && <p className="mt-2 text-sm text-studio-600 font-medium">Package: {selectedPaket.namaPaket}</p>}
+      {/* Premium Background with Blur Elements */}
+      <div className="fixed inset-0 z-[-1] bg-studio-50 overflow-hidden">
+         <div className="absolute top-0 right-0 w-96 h-96 bg-studio-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-x-1/3 -translate-y-1/3 animate-pulse"></div>
+         <div className="absolute bottom-0 left-0 w-96 h-96 bg-studio-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/3 translate-y-1/3"></div>
+      </div>
+
+      <section className="relative min-h-[calc(100vh-72px)] py-12 px-6 lg:px-12">
+        <div className="max-w-6xl mx-auto">
+          
+          {/* Header */}
+          <div className="mb-10 text-center">
+            <h1 className="font-serif text-4xl font-bold text-studio-900 mb-2">Book Your Session</h1>
+            <p className="text-studio-500 font-medium tracking-wide">Capture your timeless moments with us</p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            
+            {/* Main Content Area */}
+            <div className="flex-1 w-full bg-white/70 backdrop-blur-xl border border-white/50 shadow-2xl shadow-studio-900/5 rounded-2xl p-8 lg:p-10 transition-all duration-500 ease-in-out">
+              
+              {/* Progress Indicator */}
+              <div className="flex items-center gap-4 mb-10">
+                <div className="flex flex-col flex-1">
+                   <div className="h-1.5 w-full bg-studio-900 rounded-full mb-2"></div>
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-studio-900">Step 1: Schedule</span>
                 </div>
-
-                <div className="space-y-8">
-                    <div>
-                        <label className="block text-sm font-medium text-studio-900 mb-3">Choose Date</label>
-                        <input 
-                          type="date" 
-                          value={selectedDate} 
-                          onChange={(e) => { setSelectedDate(e.target.value); setSelectedSchedule(null); }}
-                          min={new Date().toISOString().split("T")[0]}
-                          className="w-full bg-studio-50 border border-studio-200 p-4 text-sm text-studio-900 font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" 
-                        />
-                    </div>
-
-                    <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <label className="block text-sm font-medium text-studio-900">Available Time Slots</label>
-                            <div className="flex items-center gap-4 text-xs text-studio-500">
-                                <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-studio-900"></span> Available</span>
-                                <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-studio-300"></span> Booked</span>
-                            </div>
-                        </div>
-
-                        {schedules.length === 0 ? (
-                           <p className="text-sm text-red-600">No slots available on this date.</p>
-                        ) : (
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                              {schedules.map(s => (
-                                <button 
-                                  key={s.id}
-                                  onClick={() => setSelectedSchedule(s)} 
-                                  className={`p-3 border text-sm font-medium text-center transition rounded-sm ${selectedSchedule?.id === s.id ? 'bg-studio-900 text-white border-studio-900' : 'border-studio-200 hover:border-studio-900 text-studio-900 bg-white'}`}
-                                >
-                                  {s.jamMulai} - {s.jamSelesai}
-                                </button>
-                              ))}
-                          </div>
-                        )}
-                    </div>
-
-                    <div className="flex justify-between items-center pt-8 border-t border-studio-200">
-                        <button onClick={() => router.push('/packages')} className="text-sm text-studio-500 hover:text-studio-900 transition">
-                            Back
-                        </button>
-                        <button onClick={proceedToStep2} className="btn-primary px-8 py-3 rounded-sm text-sm font-medium tracking-wide">
-                            Continue
-                        </button>
-                    </div>
+                <div className="flex flex-col flex-1">
+                   <div className={`h-1.5 w-full rounded-full mb-2 transition-colors duration-300 ${step === 2 ? 'bg-studio-900' : 'bg-studio-200'}`}></div>
+                   <span className={`text-[10px] font-bold uppercase tracking-widest ${step === 2 ? 'text-studio-900' : 'text-studio-400'}`}>Step 2: Details</span>
                 </div>
-            </div>
-        </section>
-      )}
+              </div>
 
-      {step === 2 && (
-        <section className="flex-col p-6 lg:p-12 bg-studio-50 min-h-[calc(100vh-72px)]">
-            <div className="max-w-5xl mx-auto w-full grid md:grid-cols-5 gap-12 pt-8">
-                {/* Form */}
-                <div className="md:col-span-3 space-y-8">
-                    <div className="border-b border-studio-200 pb-6">
-                        <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-studio-500">Step 2 of 3</span>
-                        <h2 className="text-3xl font-serif font-semibold text-studio-900 mt-2">Your Details</h2>
+              {step === 1 && (
+                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="space-y-2">
+                      <h2 className="text-2xl font-serif font-bold text-studio-900">Select Date & Time</h2>
+                      <p className="text-sm text-studio-500">Choose your preferred schedule for <span className="font-semibold text-studio-900">{selectedPaket?.namaPaket}</span></p>
                     </div>
 
                     <div className="space-y-6">
+                        {/* Date Picker */}
+                        <div className="group">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-studio-500 mb-2">Choose Date</label>
+                            <div className="relative">
+                              <input 
+                                type="date" 
+                                value={selectedDate} 
+                                onChange={(e) => { setSelectedDate(e.target.value); setSelectedSchedule(null); }}
+                                min={new Date().toISOString().split("T")[0]}
+                                className="w-full bg-white border border-studio-200 p-4 pl-12 text-sm text-studio-900 font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" 
+                              />
+                              <i className="fa-regular fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-studio-400 group-hover:text-studio-900 transition-colors"></i>
+                            </div>
+                        </div>
+
+                        {/* Time Slots */}
                         <div>
-                            <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Full Name</label>
-                            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" />
-                        </div>
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                                <label className="block text-xs font-bold uppercase tracking-wider text-studio-500">Available Time Slots</label>
+                                <div className="flex items-center gap-4 text-xs font-medium text-studio-500">
+                                    <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></span> Available</span>
+                                    <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-studio-200"></span> Booked</span>
+                                </div>
+                            </div>
 
-                        <div className="grid grid-cols-2 gap-6">
+                            {schedules.length === 0 ? (
+                               <div className="bg-red-50 border border-red-100 p-6 rounded-xl text-center">
+                                 <i className="fa-regular fa-calendar-xmark text-2xl text-red-400 mb-2"></i>
+                                 <p className="text-sm font-medium text-red-600">No slots available on this date. Please choose another date.</p>
+                               </div>
+                            ) : (
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                  {schedules.map(s => (
+                                    <button 
+                                      key={s.id}
+                                      onClick={() => setSelectedSchedule(s)} 
+                                      className={`relative overflow-hidden p-4 border text-sm font-semibold text-center transition-all duration-300 rounded-xl hover:-translate-y-1 hover:shadow-lg
+                                        ${selectedSchedule?.id === s.id 
+                                          ? 'bg-studio-900 text-white border-studio-900 shadow-md scale-[1.02]' 
+                                          : 'border-studio-200 hover:border-studio-400 text-studio-900 bg-white/50 backdrop-blur-sm'
+                                        }`}
+                                    >
+                                      {s.jamMulai} - {s.jamSelesai}
+                                      {selectedSchedule?.id === s.id && (
+                                        <div className="absolute inset-0 bg-white/20 blur-sm transform scale-150 rotate-45 pointer-events-none opacity-50"></div>
+                                      )}
+                                    </button>
+                                  ))}
+                              </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-8 mt-8 border-t border-studio-200/50">
+                        <button onClick={() => router.push('/packages')} className="group flex items-center gap-2 text-sm font-semibold text-studio-500 hover:text-studio-900 transition-colors">
+                            <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> Back to Packages
+                        </button>
+                        <button onClick={proceedToStep2} className="btn-primary px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide shadow-lg shadow-studio-900/20 hover:shadow-studio-900/40 hover:-translate-y-0.5 transition-all">
+                            Continue <i className="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="space-y-10 animate-in fade-in slide-in-from-right-8 duration-500">
+                    <div className="space-y-2">
+                      <h2 className="text-2xl font-serif font-bold text-studio-900">Your Details & Add-ons</h2>
+                      <p className="text-sm text-studio-500">Complete your information and enhance your session.</p>
+                    </div>
+
+                    <div className="space-y-6">
+                        {/* Personal Info */}
+                        <div className="bg-white/40 p-6 rounded-2xl border border-white/60 space-y-5">
+                          <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-200/50 pb-3">Personal Information</h3>
+                          <div className="grid md:grid-cols-2 gap-5">
                             <div>
-                                <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Phone</label>
-                                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="08..." className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-1 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-sm transition" />
+                                <label className="block text-xs font-semibold text-studio-600 mb-2">Full Name</label>
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
                             </div>
                             <div>
-                                <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Email</label>
-                                <input type="email" value={email} disabled className="w-full bg-studio-100 border border-studio-200 p-3.5 text-sm font-medium text-studio-500 rounded-sm cursor-not-allowed" />
+                                <label className="block text-xs font-semibold text-studio-600 mb-2">Phone Number</label>
+                                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="08..." className="w-full bg-white border border-studio-200 p-3.5 text-sm font-medium focus:ring-2 focus:ring-studio-900 focus:border-studio-900 focus:outline-none rounded-xl transition shadow-sm hover:shadow-md" />
                             </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-xs font-semibold text-studio-600 mb-2">Email Address</label>
+                                <input type="email" value={email} disabled className="w-full bg-studio-50/50 border border-studio-200 p-3.5 text-sm font-medium text-studio-500 rounded-xl cursor-not-allowed opacity-80" />
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="pt-6 border-t border-studio-200">
-                            <h4 className="text-sm font-medium text-studio-900 mb-4">Add-ons</h4>
-                            <div className="space-y-3">
+                        {/* Add-ons */}
+                        <div className="bg-white/40 p-6 rounded-2xl border border-white/60">
+                            <h3 className="text-xs font-bold uppercase tracking-wider text-studio-900 border-b border-studio-200/50 pb-3 mb-5">Enhance Your Session</h3>
+                            <div className="grid sm:grid-cols-2 gap-4">
                                 {services.map(s => (
-                                  <div key={s.id} className="flex items-center justify-between p-4 bg-white border border-studio-200 rounded-sm">
-                                      <div>
-                                          <span className="text-sm font-medium text-studio-900 block">{s.namaLayanan}</span>
-                                          <span className="text-xs text-studio-500">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>
+                                  <div key={s.id} className="flex flex-col justify-between p-4 bg-white border border-studio-200 rounded-xl shadow-sm hover:shadow-md hover:border-studio-300 transition-all">
+                                      <div className="mb-4">
+                                          <span className="text-sm font-bold text-studio-900 block">{s.namaLayanan}</span>
+                                          <span className="text-xs font-medium text-indigo-600">+Rp {s.hargaSatuan?.toLocaleString('id-ID')}</span>
                                       </div>
-                                      <div className="flex items-center gap-3">
-                                          <button onClick={() => handleServiceChange(s.id, -1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">-</button>
-                                          <span className="text-sm font-medium w-4 text-center">{selectedServices[s.id] || 0}</span>
-                                          <button onClick={() => handleServiceChange(s.id, 1)} className="w-8 h-8 flex items-center justify-center border border-studio-200 hover:border-studio-900 transition rounded-sm text-studio-600">+</button>
+                                      <div className="flex items-center justify-between bg-studio-50 rounded-lg p-1">
+                                          <button onClick={() => handleServiceChange(s.id, -1)} className="w-8 h-8 flex items-center justify-center rounded-md bg-white shadow-sm text-studio-600 hover:text-studio-900 hover:bg-studio-100 transition"><i className="fa-solid fa-minus text-xs"></i></button>
+                                          <span className="text-sm font-bold w-8 text-center">{selectedServices[s.id] || 0}</span>
+                                          <button onClick={() => handleServiceChange(s.id, 1)} className="w-8 h-8 flex items-center justify-center rounded-md bg-white shadow-sm text-studio-600 hover:text-studio-900 hover:bg-studio-100 transition"><i className="fa-solid fa-plus text-xs"></i></button>
                                       </div>
                                   </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Summary */}
-                <div className="md:col-span-2">
-                    <div className="bg-white p-8 border border-studio-200 rounded-sm sticky top-24">
-                        <h3 className="font-serif font-semibold text-xl text-studio-900 mb-6">Summary</h3>
-
-                        <div className="space-y-3 text-sm mb-6 border-b border-studio-200 pb-6">
-                            <div className="flex justify-between">
-                                <span className="text-studio-500">Package</span>
-                                <span className="font-medium text-studio-900">{selectedPaket?.namaPaket || "-"}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-studio-500">Date</span>
-                                <span className="font-medium text-studio-900">{selectedDate || "-"}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-studio-500">Time</span>
-                                <span className="font-medium text-studio-900">{selectedSchedule?.jamMulai || "-"}</span>
-                            </div>
-                        </div>
-
-                        <div className="mb-6 border-b border-studio-200 pb-6">
-                            <label className="block text-xs font-medium uppercase tracking-wider text-studio-500 mb-2">Promo Code</label>
-                            <div className="flex gap-2">
-                                <input type="text" value={voucherCode} onChange={e => setVoucherCode(e.target.value.toUpperCase())} className="w-full bg-studio-50 border border-studio-200 p-2.5 text-sm uppercase font-medium focus:ring-1 focus:ring-studio-900 focus:outline-none rounded-sm transition" />
-                                <button onClick={handleApplyVoucher} className="btn-outline px-4 text-xs font-medium rounded-sm">Apply</button>
-                            </div>
-                            {voucherError && <p className="text-xs font-medium text-red-600 mt-2">{voucherError}</p>}
-                            {appliedVoucher && <p className="text-xs font-medium text-green-700 mt-2">Code applied successfully.</p>}
-                        </div>
-
-                        <div className="space-y-2 text-sm mb-8">
-                            <div className="flex justify-between text-studio-600">
-                                <span>Subtotal</span>
-                                <span>Rp {subtotalPaket.toLocaleString('id-ID')}</span>
-                            </div>
-                            <div className="flex justify-between text-studio-600">
-                                <span>Add-ons</span>
-                                <span>Rp {subtotalLayanan.toLocaleString('id-ID')}</span>
-                            </div>
-                            {diskon > 0 && (
-                              <div className="flex justify-between text-green-700 font-medium">
-                                  <span>Discount</span>
-                                  <span>-Rp {diskon.toLocaleString('id-ID')}</span>
-                              </div>
-                            )}
-                            <div className="flex justify-between text-lg font-semibold text-studio-900 pt-4 border-t border-studio-200">
-                                <span>Total</span>
-                                <span>Rp {totalBayar.toLocaleString('id-ID')}</span>
-                            </div>
-                        </div>
-
-                        <button onClick={submitBooking} className="btn-primary w-full py-4 rounded-sm text-sm font-medium tracking-wide uppercase">
-                            Proceed to Payment
-                        </button>
-                        <button onClick={() => setStep(1)} className="w-full text-center text-xs text-studio-500 hover:text-studio-900 mt-4 transition">
-                            Back
+                    <div className="flex justify-between items-center pt-4 mt-8">
+                        <button onClick={() => setStep(1)} className="group flex items-center gap-2 text-sm font-semibold text-studio-500 hover:text-studio-900 transition-colors">
+                            <i className="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> Back to Schedule
                         </button>
                     </div>
                 </div>
+              )}
             </div>
-        </section>
-      )}
+
+            {/* Sidebar Order Summary */}
+            <div className="w-full lg:w-[380px] shrink-0">
+               <div className="bg-studio-900 text-white p-8 rounded-2xl shadow-2xl sticky top-24 transform transition-all hover:-translate-y-1 duration-500">
+                  <h3 className="font-serif font-bold text-xl mb-6 flex items-center gap-3">
+                    <i className="fa-solid fa-receipt text-indigo-400"></i> Order Summary
+                  </h3>
+
+                  <div className="space-y-4 text-sm font-medium mb-6 border-b border-white/20 pb-6">
+                      <div className="flex justify-between items-center">
+                          <span className="text-studio-300">Package</span>
+                          <span className="text-right font-bold text-indigo-300">{selectedPaket?.namaPaket || "-"}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                          <span className="text-studio-300">Date</span>
+                          <span className="text-right font-bold">{selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : "-"}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                          <span className="text-studio-300">Time</span>
+                          <span className="text-right font-bold bg-white/10 px-2 py-0.5 rounded">{selectedSchedule?.jamMulai || "-"}</span>
+                      </div>
+                  </div>
+
+                  <div className="mb-6 border-b border-white/20 pb-6">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-studio-300 mb-3">Promo Code</label>
+                      <div className="flex gap-2">
+                          <input type="text" placeholder="Enter code" value={voucherCode} onChange={e => setVoucherCode(e.target.value.toUpperCase())} className="w-full bg-white/10 border border-white/20 p-3 text-sm uppercase font-bold text-white placeholder-white/40 focus:ring-2 focus:ring-indigo-400 focus:outline-none rounded-xl transition" />
+                          <button onClick={handleApplyVoucher} className="bg-white/20 hover:bg-white/30 px-5 text-sm font-bold rounded-xl transition">Apply</button>
+                      </div>
+                      {voucherError && <p className="text-xs font-medium text-red-400 mt-2 flex items-center gap-1.5"><i className="fa-solid fa-circle-exclamation"></i> {voucherError}</p>}
+                      {appliedVoucher && <p className="text-xs font-medium text-green-400 mt-2 flex items-center gap-1.5"><i className="fa-solid fa-circle-check"></i> Code applied successfully!</p>}
+                  </div>
+
+                  <div className="space-y-3 text-sm font-medium mb-8">
+                      <div className="flex justify-between text-studio-300">
+                          <span>Subtotal Package</span>
+                          <span>Rp {subtotalPaket.toLocaleString('id-ID')}</span>
+                      </div>
+                      <div className="flex justify-between text-studio-300">
+                          <span>Add-ons</span>
+                          <span>Rp {subtotalLayanan.toLocaleString('id-ID')}</span>
+                      </div>
+                      {diskon > 0 && (
+                        <div className="flex justify-between text-green-400 font-bold bg-green-400/10 p-2 rounded-lg -mx-2">
+                            <span>Discount ({appliedVoucher?.kodeVoucher})</span>
+                            <span>-Rp {diskon.toLocaleString('id-ID')}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-end pt-6 mt-2 border-t border-white/20">
+                          <span className="text-base font-bold text-white">Total</span>
+                          <span className="text-3xl font-bold text-indigo-400 tracking-tight">Rp {totalBayar.toLocaleString('id-ID')}</span>
+                      </div>
+                  </div>
+
+                  <button 
+                    onClick={submitBooking} 
+                    disabled={step === 1 || !selectedSchedule}
+                    className="w-full py-4 rounded-xl text-sm font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      bg-white text-studio-900 hover:bg-indigo-50 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:-translate-y-0.5"
+                  >
+                      {step === 1 ? 'Complete Step 1 First' : 'Proceed to Payment'}
+                  </button>
+               </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
     </>
   );
 }
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center">Memuat...</div>}>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-studio-50"><div className="w-8 h-8 border-4 border-studio-900 border-t-transparent rounded-full animate-spin"></div></div>}>
       <BookingFlow />
     </Suspense>
   );
