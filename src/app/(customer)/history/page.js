@@ -37,7 +37,7 @@ export default function HistoryPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {history.map((item) => (
-                  <div key={item.id} className="bg-white border border-studio-200 rounded-sm relative shadow-sm">
+                  <div key={item.id} id={`ticket-${item.id}`} className="bg-white border border-studio-200 rounded-sm relative shadow-sm">
                       {/* Ticket Header */}
                       <div className="p-6 border-b border-dashed border-studio-300 relative">
                           <div className="absolute -left-3 -bottom-3 w-6 h-6 bg-studio-50 rounded-full border-r border-studio-200"></div>
@@ -55,8 +55,29 @@ export default function HistoryPage() {
                               </span>
                           </div>
                           
-                          <div className="text-sm text-studio-600">
-                              Booking Ref: <span className="font-semibold text-studio-900">{item.kodeBooking}</span>
+                          <div className="flex justify-between items-center text-sm text-studio-600">
+                              <div>
+                                  Booking Ref: <span className="font-semibold text-studio-900">{item.kodeBooking}</span>
+                              </div>
+                              <button 
+                                onClick={() => {
+                                  const style = document.createElement('style');
+                                  style.innerHTML = `
+                                    @media print {
+                                      body * { visibility: hidden; }
+                                      #ticket-${item.id}, #ticket-${item.id} * { visibility: visible; }
+                                      #ticket-${item.id} { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+                                    }
+                                  `;
+                                  document.head.appendChild(style);
+                                  window.print();
+                                  setTimeout(() => document.head.removeChild(style), 1000);
+                                }}
+                                className="text-studio-500 hover:text-studio-900 text-xs font-semibold flex items-center gap-1 transition"
+                              >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+                                  Print
+                              </button>
                           </div>
                       </div>
 
