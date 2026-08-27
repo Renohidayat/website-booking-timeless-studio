@@ -34,7 +34,27 @@ export default function PaymentPage() {
           setBooking({ id: docSnap.id, ...docSnap.data() });
         }
       });
-      return () => unsub();
+
+      // Poll status every 5 seconds since webhook won't work on localhost
+      const intervalId = setInterval(async () => {
+        try {
+          const res = await fetch("/api/payment/check-status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kode_booking }),
+          });
+          const data = await res.json();
+          // If status changes to dibayar, onSnapshot above will also catch it
+          // but we rely on the API to trigger the Firestore update.
+        } catch (error) {
+          console.error("Failed to poll status:", error);
+        }
+      }, 5000);
+
+      return () => {
+        unsub();
+        clearInterval(intervalId);
+      };
     }
   }, [user, loading, router, kode_booking]);
 
