@@ -121,6 +121,15 @@ export default function HistoryPage() {
                               <div className="w-full h-16 bg-[repeating-linear-gradient(90deg,#18181b_0,#18181b_2px,transparent_2px,transparent_4px,#18181b_4px,#18181b_8px,transparent_8px,transparent_12px)] opacity-80 mb-2"></div>
                               <span className="text-[10px] tracking-[0.3em] text-studio-400">{item.kodeBooking}</span>
                           </div>
+
+                          {item.status === 'menunggu_pembayaran' && (
+                              <button
+                                onClick={() => router.push(`/payment/${item.kodeBooking}`)}
+                                className="w-full mt-4 bg-studio-900 text-white py-3 rounded-sm text-xs font-bold uppercase tracking-widest hover:bg-studio-800 transition shadow-sm"
+                              >
+                                  Lanjutkan Pembayaran
+                              </button>
+                          )}
                       </div>
                   </div>
                 ))}
