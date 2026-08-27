@@ -41,7 +41,18 @@ export const getSchedules = async (tanggal) => {
   }
   
   const snapshot = await getDocs(q);
-  const schedules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const schedules = snapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      id_jadwal: doc.id,
+      tanggal: data.tanggal,
+      jam_mulai: data.jamMulai,
+      jam_selesai: data.jamSelesai,
+      status_slot: data.statusSlot,
+      ...data
+    };
+  });
   
   // Sort by tanggal then by jamMulai in memory to avoid Firestore Composite Index requirements
   schedules.sort((a, b) => {
