@@ -1,7 +1,10 @@
 import { getBookings } from "@/lib/data";
+import { VerifyPaymentButton } from "@/components/AdminActions";
 
 export default async function AdminBookingsPage() {
-  const bookings = await getBookings();  return (
+  const bookings = await getBookings();
+  
+  return (
     <div className="space-y-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
@@ -32,10 +35,10 @@ export default async function AdminBookingsPage() {
                     <div className="text-xs text-gray-400">{b.noHp}</div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {b.package.namaPaket}<br/>
-                    <span className="text-xs text-gray-400">{b.schedule.tanggal} ({b.schedule.jamMulai})</span>
+                    {b.package?.namaPaket || "-"}<br/>
+                    <span className="text-xs text-gray-400">{b.schedule?.tanggal || "-"} ({b.schedule?.jamMulai || "-"})</span>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {b.totalHarga.toLocaleString('id-ID')}</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {b.totalHarga?.toLocaleString('id-ID') || 0}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm">
                     <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
                       b.status === 'dibayar' ? 'bg-green-50 text-green-700 ring-green-600/20' :
@@ -45,11 +48,7 @@ export default async function AdminBookingsPage() {
                     </span>
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    {b.status === 'menunggu_pembayaran' ? (
-                      <button className="text-indigo-600 hover:text-indigo-900 mr-4">Verifikasi Bayar</button>
-                    ) : (
-                      <button className="text-gray-600 hover:text-gray-900 mr-4">Detail</button>
-                    )}
+                    {b.status === 'menunggu_pembayaran' && <VerifyPaymentButton id={b.id} />}
                   </td>
                 </tr>
               ))}

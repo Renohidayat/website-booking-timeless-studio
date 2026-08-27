@@ -1,4 +1,5 @@
 import { getPackages, getAdditionalServices } from "@/lib/data";
+import { CreatePackageButton, EditPackageButton, CreateServiceButton, EditServiceButton } from "@/components/AdminActions";
 
 export default async function AdminPackagesPage() {
   const packages = await getPackages();
@@ -13,9 +14,7 @@ export default async function AdminPackagesPage() {
             <p className="mt-2 text-sm text-gray-700">Daftar semua paket self photo studio.</p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            <button type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-              Tambah Paket
-            </button>
+            <CreatePackageButton />
           </div>
         </div>
         <div className="mt-4 flow-root">
@@ -36,11 +35,11 @@ export default async function AdminPackagesPage() {
                     {packages.map((pkg) => (
                       <tr key={pkg.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{pkg.namaPaket}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {pkg.hargaDasar.toLocaleString('id-ID')}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {pkg.hargaDasar?.toLocaleString('id-ID')}</td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.durasiMenit}</td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{pkg.maksOrang}</td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                          <EditPackageButton pkg={pkg} />
                         </td>
                       </tr>
                     ))}
@@ -58,9 +57,7 @@ export default async function AdminPackagesPage() {
             <h1 className="text-2xl font-semibold leading-6 text-gray-900">Layanan Tambahan</h1>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            <button type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-              Tambah Layanan
-            </button>
+            <CreateServiceButton />
           </div>
         </div>
         <div className="mt-4 flow-root">
@@ -77,9 +74,9 @@ export default async function AdminPackagesPage() {
                 {services.map((svc) => (
                   <tr key={svc.id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{svc.namaLayanan}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {svc.hargaSatuan.toLocaleString('id-ID')}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rp {svc.hargaSatuan?.toLocaleString('id-ID')}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                      <EditServiceButton svc={svc} />
                     </td>
                   </tr>
                 ))}

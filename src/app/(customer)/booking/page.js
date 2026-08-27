@@ -50,7 +50,7 @@ function BookingFlow() {
       setPackages(pkgs);
       setServices(svcs);
       if (initialPaketId) {
-        const pkg = pkgs.find(p => p.id_paket === Number(initialPaketId));
+        const pkg = pkgs.find(p => String(p.id_paket) === String(initialPaketId));
         if (pkg) setSelectedPaket(pkg);
       } else {
         // Default select the first package if none provided
@@ -132,8 +132,8 @@ function BookingFlow() {
         namaPelanggan: name,
         email: email || "guest@example.com",
         noHp: phone,
-        packageId: selectedPaket.id,
-        scheduleId: selectedSchedule.id,
+        packageId: selectedPaket.id_paket,
+        scheduleId: selectedSchedule.id_jadwal,
         totalHarga: totalBayar
       });
       router.push(`/payment/${kodeBooking}`);

@@ -1,4 +1,5 @@
 import { getVouchers } from "@/lib/data";
+import { CreateVoucherButton, EditVoucherButton, DeleteVoucherButton } from "@/components/AdminActions";
 
 export default async function AdminVouchersPage() {
   const vouchers = await getVouchers();
@@ -11,9 +12,7 @@ export default async function AdminVouchersPage() {
           <p className="mt-2 text-sm text-gray-700">Kelola kode promo dan diskon untuk pelanggan.</p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button type="button" className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-            Tambah Voucher
-          </button>
+          <CreateVoucherButton />
         </div>
       </div>
       
@@ -34,13 +33,13 @@ export default async function AdminVouchersPage() {
                 <tr key={v.id}>
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-indigo-600">{v.kodeVoucher}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {v.tipeDiskon === 'persen' ? `${v.nilaiDiskon}%` : `Rp ${v.nilaiDiskon.toLocaleString('id-ID')}`}
+                    {v.tipeDiskon === 'persen' ? `${v.nilaiDiskon}%` : `Rp ${v.nilaiDiskon?.toLocaleString('id-ID')}`}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{v.tglBerakhir}</td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{v.kuota}</td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                    <button className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
-                    <button className="text-red-600 hover:text-red-900">Hapus</button>
+                    <EditVoucherButton voucher={v} />
+                    <DeleteVoucherButton id={v.id} />
                   </td>
                 </tr>
               ))}
