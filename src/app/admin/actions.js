@@ -35,6 +35,7 @@ export async function createBookingAction(data) {
     email: data.email,
     noHp: data.noHp,
     packageId: data.packageId,
+    scheduleId: data.scheduleId,
     tanggal: data.tanggal,
     jamMulai: data.jamMulai,
     totalHarga: data.totalHarga,
@@ -42,7 +43,14 @@ export async function createBookingAction(data) {
     createdAt: Date.now()
   });
   
+  if (data.scheduleId) {
+    await updateDoc(doc(db, "schedules", data.scheduleId), {
+      statusSlot: "dipesan"
+    });
+  }
+  
   revalidatePath('/admin/bookings');
+  revalidatePath('/admin/schedules');
 }
 
 export async function updateBookingStatusAction(id, status) {
