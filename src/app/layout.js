@@ -16,9 +16,6 @@ import { AuthProvider } from "@/lib/auth-context";
 export const metadata = {
   title: "Timeless Studio Booking",
   description: "Layanan Jasa Kreatif Self Photo Studio",
-  icons: {
-    icon: '/logo.jpg',
-  },
 };
 
 export default function RootLayout({ children }) {
