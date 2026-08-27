@@ -11,8 +11,8 @@ const apiClient = axios.create({
 });
 
 export const ronzzpayConfig = {
-  sandboxCreateUrl: 'https://pg.ronzzyt.id/sandbox/transaction/create',
-  sandboxStatusUrl: 'https://pg.ronzzyt.id/sandbox/transaction/status',
+  sandboxCreateUrl: 'https://pg.ronzzyt.id/api/transaction/create',
+  sandboxStatusUrl: 'https://pg.ronzzyt.id/api/transaction/status',
 };
 
 /**
