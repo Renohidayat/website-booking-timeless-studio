@@ -131,6 +131,16 @@ function BookingFlow() {
     
     const kodeBooking = `BKG-${Date.now().toString().slice(-6)}`;
     
+    const addons = Object.entries(selectedServices).map(([id, qty]) => {
+      const svc = services.find(s => String(s.id) === String(id) || String(s.id_layanan) === String(id));
+      return {
+        id: svc.id || svc.id_layanan || id,
+        namaLayanan: svc.namaLayanan,
+        hargaSatuan: svc.hargaSatuan,
+        qty
+      };
+    });
+
     try {
       await createBookingAction({
         kodeBooking,
@@ -141,7 +151,8 @@ function BookingFlow() {
         scheduleId: selectedSchedule.id,
         tanggal: selectedSchedule.tanggal,
         jamMulai: selectedSchedule.jam_mulai || selectedSchedule.jamMulai,
-        totalHarga: totalBayar
+        totalHarga: totalBayar,
+        addons
       });
       router.push(`/payment/${kodeBooking}`);
     } catch (err) {

@@ -116,6 +116,20 @@ export default function HistoryPage() {
                               <span className="block text-sm font-medium text-studio-900">{item.namaPelanggan || user?.email?.split('@')[0] || "Guest"}</span>
                           </div>
                           
+                          {item.addons && item.addons.length > 0 && (
+                              <div className="pt-4 border-t border-studio-100">
+                                  <span className="block text-[10px] uppercase tracking-wider text-studio-400 mb-2">Add-ons</span>
+                                  <ul className="space-y-1">
+                                      {item.addons.map((addon, idx) => (
+                                          <li key={idx} className="flex justify-between items-center text-xs">
+                                              <span className="font-medium text-studio-900">{addon.qty}x {addon.namaLayanan}</span>
+                                              <span className="text-studio-600">Rp {(addon.hargaSatuan * addon.qty).toLocaleString('id-ID')}</span>
+                                          </li>
+                                      ))}
+                                  </ul>
+                              </div>
+                          )}
+
                           {/* Barcode Mock */}
                           <div className="pt-4 flex flex-col items-center justify-center border-t border-studio-100">
                               <div className="w-full h-16 bg-[repeating-linear-gradient(90deg,#18181b_0,#18181b_2px,transparent_2px,transparent_4px,#18181b_4px,#18181b_8px,transparent_8px,transparent_12px)] opacity-80 mb-2"></div>

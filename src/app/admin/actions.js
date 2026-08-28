@@ -56,6 +56,7 @@ export async function createBookingAction(data) {
     tanggal: data.tanggal,
     jamMulai: data.jamMulai,
     totalHarga: data.totalHarga,
+    addons: data.addons || [],
     status: "menunggu_pembayaran",
     createdAt: Date.now()
   });
