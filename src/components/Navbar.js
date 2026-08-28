@@ -20,11 +20,11 @@ export default function Navbar() {
     <nav className="bg-white border-b border-studio-900 sticky top-0 z-50 h-[72px] flex items-center shadow-sm">
       <div className="container mx-auto px-6 lg:px-12 flex items-center justify-between">
         {/* Brand / Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.jpg" alt="Timeless Studio Logo" width={40} height={40} className="object-contain rounded" />
+        <Link href="/" className="flex items-center gap-2 md:gap-3">
+          <Image src="/logo.jpg" alt="Timeless Studio Logo" width={32} height={32} className="object-contain rounded md:w-[40px] md:h-[40px]" />
           <div>
-            <span className="font-serif font-bold text-xl tracking-wide text-studio-900 block leading-none">TIMELESS</span>
-            <span className="text-[10px] text-studio-500 tracking-[0.2em] uppercase block mt-1">Photo Studio</span>
+            <span className="font-serif font-bold text-base md:text-xl tracking-wide text-studio-900 block leading-none">TIMELESS</span>
+            <span className="text-[8px] md:text-[10px] text-studio-500 tracking-[0.2em] uppercase block mt-0.5 md:mt-1">Photo Studio</span>
           </div>
         </Link>
 
@@ -35,10 +35,10 @@ export default function Navbar() {
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 md:gap-4">
           {!loading && user ? (
             <>
-              <Link href="/booking" className="btn-primary text-xs md:text-sm px-6 py-2.5 rounded-sm font-medium tracking-wide">
+              <Link href="/booking" className="btn-primary text-[10px] md:text-sm px-3 md:px-6 py-1.5 md:py-2.5 rounded-sm font-medium tracking-wide">
                 Book Session
               </Link>
 
@@ -46,7 +46,7 @@ export default function Navbar() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setOpen(!open)}
-                  className="w-9 h-9 rounded-full bg-studio-900 text-white flex items-center justify-center text-sm font-semibold uppercase hover:bg-studio-800 transition"
+                  className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-studio-900 text-white flex items-center justify-center text-xs md:text-sm font-semibold uppercase hover:bg-studio-800 transition"
                 >
                   {user.email.charAt(0)}
                 </button>
@@ -86,10 +86,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-xs md:text-sm font-medium text-studio-600 hover:text-studio-900 transition">
+              <Link href="/login" className="text-[10px] md:text-sm font-medium text-studio-600 hover:text-studio-900 transition">
                 Login
               </Link>
-              <Link href="/booking" className="btn-primary text-xs md:text-sm px-6 py-2.5 rounded-sm font-medium tracking-wide ml-4">
+              <Link href="/booking" className="btn-primary text-[10px] md:text-sm px-3 md:px-6 py-1.5 md:py-2.5 rounded-sm font-medium tracking-wide">
                 Book Session
               </Link>
             </>
