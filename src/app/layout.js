@@ -16,7 +16,30 @@ import GlobalFooter from "@/components/GlobalFooter";
 
 export const metadata = {
   title: "Timeless Studio Booking",
-  description: "Layanan Jasa Kreatif Self Photo Studio",
+  description: "Layanan Jasa Kreatif Self Photo Studio - Pesan jadwal sesi foto Anda secara online.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  openGraph: {
+    title: 'Timeless Studio Booking',
+    description: 'Layanan Jasa Kreatif Self Photo Studio - Pesan jadwal sesi foto Anda secara online.',
+    url: '/',
+    siteName: 'Timeless Studio',
+    images: [
+      {
+        url: '/logo.jpg', // Gambar yang akan muncul di WhatsApp
+        width: 800,
+        height: 600,
+        alt: 'Timeless Studio Logo',
+      },
+    ],
+    locale: 'id_ID',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Timeless Studio Booking',
+    description: 'Layanan Jasa Kreatif Self Photo Studio - Pesan jadwal sesi foto Anda secara online.',
+    images: ['/logo.jpg'],
+  },
 };
 
 export default function RootLayout({ children }) {
