@@ -34,6 +34,7 @@ function BookingFlow() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -141,8 +142,9 @@ function BookingFlow() {
       };
     });
 
+    setIsSubmitting(true);
     try {
-      await createBookingAction({
+      const result = await createBookingAction({
         kodeBooking,
         namaPelanggan: name,
         email: email || "guest@example.com",
@@ -154,10 +156,18 @@ function BookingFlow() {
         totalHarga: totalBayar,
         addons
       });
+
+      if (result && !result.success) {
+        alert(result.message || "Gagal membuat booking.");
+        setIsSubmitting(false);
+        return;
+      }
+
       router.push(`/payment/${kodeBooking}`);
     } catch (err) {
       console.error(err);
-      alert(err.message || "Terjadi kesalahan saat membuat booking.");
+      alert(err.message || "Terjadi kesalahan sistem saat membuat booking.");
+      setIsSubmitting(false);
     }
   };
 

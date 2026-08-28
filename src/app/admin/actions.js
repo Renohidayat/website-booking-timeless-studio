@@ -29,39 +29,45 @@ export async function updateScheduleAction(id, data) {
 
 // === BOOKINGS ===
 export async function createBookingAction(data) {
-  // Cegah double-booking dengan mengecek apakah sudah ada booking di tanggal dan jam yang sama
-  const q = query(
-    collection(db, "bookings"),
-    where("tanggal", "==", data.tanggal),
-    where("jamMulai", "==", data.jamMulai)
-  );
-  
-  const snapshot = await getDocs(q);
-  const isBooked = snapshot.docs.some(doc => {
-    const status = doc.data().status;
-    return status !== "dibatalkan" && status !== "kadaluarsa";
-  });
+  try {
+    // Cegah double-booking dengan mengecek apakah sudah ada booking di tanggal dan jam yang sama
+    const q = query(
+      collection(db, "bookings"),
+      where("tanggal", "==", data.tanggal),
+      where("jamMulai", "==", data.jamMulai)
+    );
+    
+    const snapshot = await getDocs(q);
+    const isBooked = snapshot.docs.some(doc => {
+      const status = doc.data().status;
+      return status !== "dibatalkan" && status !== "kadaluarsa";
+    });
 
-  if (isBooked) {
-    throw new Error("Jadwal ini sudah dipesan oleh orang lain.");
+    if (isBooked) {
+      return { success: false, message: "Jadwal ini sudah dipesan oleh orang lain. Silakan pilih jadwal lain." };
+    }
+
+    await addDoc(collection(db, "bookings"), {
+      kodeBooking: data.kodeBooking,
+      namaPelanggan: data.namaPelanggan,
+      email: data.email,
+      noHp: data.noHp,
+      packageId: data.packageId,
+      scheduleId: data.scheduleId,
+      tanggal: data.tanggal,
+      jamMulai: data.jamMulai,
+      totalHarga: data.totalHarga,
+      addons: data.addons || [],
+      status: "menunggu_pembayaran",
+      createdAt: Date.now()
+    });
+    
+    revalidatePath('/admin/bookings');
+    return { success: true };
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return { success: false, message: "Terjadi kesalahan internal server saat membuat booking." };
   }
-
-  await addDoc(collection(db, "bookings"), {
-    kodeBooking: data.kodeBooking,
-    namaPelanggan: data.namaPelanggan,
-    email: data.email,
-    noHp: data.noHp,
-    packageId: data.packageId,
-    scheduleId: data.scheduleId,
-    tanggal: data.tanggal,
-    jamMulai: data.jamMulai,
-    totalHarga: data.totalHarga,
-    addons: data.addons || [],
-    status: "menunggu_pembayaran",
-    createdAt: Date.now()
-  });
-  
-  revalidatePath('/admin/bookings');
 }
 
 export async function updateBookingStatusAction(id, status) {
