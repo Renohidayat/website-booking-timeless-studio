@@ -43,6 +43,15 @@ export async function POST(request) {
           status: "dibayar",
           paidAt: Date.now()
         });
+
+        // Kirim notifikasi email ke Admin
+        try {
+          const { sendAdminNotification } = await import('@/lib/email');
+          await sendAdminNotification(bookingData);
+        } catch (emailErr) {
+          console.error("Gagal memanggil fungsi email:", emailErr);
+        }
+
         return NextResponse.json({ success: true, status: "dibayar" });
       }
 
