@@ -36,6 +36,15 @@ export async function POST(request) {
           status: newStatus,
         });
 
+        if (newStatus === "dibayar") {
+          try {
+            const { sendAdminNotification } = await import('@/lib/email');
+            await sendAdminNotification(bookingDoc.data());
+          } catch (emailErr) {
+            console.error("Gagal memanggil fungsi email di webhook:", emailErr);
+          }
+        }
+
         console.log(`✅ Webhook processed. Booking ${bookingDoc.id} status updated to ${newStatus}.`);
       } else {
         console.warn(`⚠️ No booking found with paymentReffId: ${reff_id}`);
