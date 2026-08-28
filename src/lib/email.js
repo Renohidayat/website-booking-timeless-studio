@@ -1,11 +1,16 @@
 import nodemailer from 'nodemailer';
 
-export async function sendAdminNotification(bookingData) {
+export async function sendCustomerNotification(bookingData) {
   const emailUser = process.env.EMAIL_USER;
   const emailPass = process.env.EMAIL_PASS;
 
   if (!emailUser || !emailPass) {
     console.warn("EMAIL_USER atau EMAIL_PASS tidak disetel di .env.local. Notifikasi email tidak dikirim.");
+    return;
+  }
+
+  // Jika pelanggan tidak memasukkan email asli (guest), jangan kirim
+  if (!bookingData.email || bookingData.email === "guest@example.com") {
     return;
   }
 
@@ -23,27 +28,23 @@ export async function sendAdminNotification(bookingData) {
     };
 
     const mailOptions = {
-      from: `"Timeless Studio System" <${emailUser}>`,
-      to: emailUser, // Kirim ke email admin sendiri
-      subject: `[LUNAS] Pesanan Baru: ${bookingData.kodeBooking}`,
+      from: `"Timeless Studio" <${emailUser}>`,
+      to: bookingData.email, // Kirim ke email pelanggan
+      subject: `[LUNAS] E-Ticket Pesanan: ${bookingData.kodeBooking}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
           <div style="background-color: #18181b; color: #ffffff; padding: 20px; text-align: center;">
-            <h2 style="margin: 0;">Pembayaran Berhasil Diterima</h2>
+            <h2 style="margin: 0;">Pembayaran Berhasil!</h2>
           </div>
           <div style="padding: 20px; background-color: #f9fafb;">
-            <p>Halo Admin,</p>
-            <p>Pesanan dengan kode <strong>${bookingData.kodeBooking}</strong> telah berhasil dilunasi oleh pelanggan.</p>
+            <p>Halo <strong>${bookingData.namaPelanggan || 'Pelanggan'}</strong>,</p>
+            <p>Terima kasih! Pembayaran untuk pesanan dengan kode <strong>${bookingData.kodeBooking}</strong> telah berhasil kami terima.</p>
             
-            <h3 style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Detail Pesanan</h3>
+            <h3 style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Detail E-Ticket Anda</h3>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #52525b;">Nama Pelanggan:</td>
-                <td style="padding: 8px 0; font-weight: bold; text-align: right;">${bookingData.namaPelanggan || '-'}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #52525b;">No. HP:</td>
-                <td style="padding: 8px 0; font-weight: bold; text-align: right;">${bookingData.noHp || '-'}</td>
+                <td style="padding: 8px 0; color: #52525b;">Kode Booking:</td>
+                <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #18181b;">${bookingData.kodeBooking}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #52525b;">Tanggal Booking:</td>
@@ -60,19 +61,20 @@ export async function sendAdminNotification(bookingData) {
             </table>
             
             <div style="margin-top: 30px; text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin/bookings" style="background-color: #18181b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Lihat Dasbor Admin</a>
+              <p style="color: #71717a; font-size: 14px; margin-bottom: 20px;">Silakan tunjukkan E-Ticket ini (atau halaman History di website) kepada petugas kami saat Anda tiba di studio.</p>
+              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/history" style="background-color: #18181b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Lihat Tiket Saya</a>
             </div>
           </div>
           <div style="background-color: #eaeaea; color: #71717a; padding: 10px; text-align: center; font-size: 12px;">
-            Email ini dikirim otomatis oleh sistem Timeless Studio Booking.
+            Harap datang 10 menit sebelum jadwal Anda dimulai. Email ini dibuat secara otomatis.
           </div>
         </div>
       `,
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("Notifikasi admin berhasil dikirim: %s", info.messageId);
+    console.log("Notifikasi pelanggan berhasil dikirim ke %s: %s", bookingData.email, info.messageId);
   } catch (error) {
-    console.error("Gagal mengirim notifikasi email admin:", error);
+    console.error("Gagal mengirim notifikasi email pelanggan:", error);
   }
 }

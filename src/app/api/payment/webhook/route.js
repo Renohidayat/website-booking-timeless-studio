@@ -38,8 +38,8 @@ export async function POST(request) {
 
         if (newStatus === "dibayar") {
           try {
-            const { sendAdminNotification } = await import('@/lib/email');
-            await sendAdminNotification(bookingDoc.data());
+            const { sendCustomerNotification } = await import('@/lib/email');
+            await sendCustomerNotification(bookingDoc.data());
           } catch (emailErr) {
             console.error("Gagal memanggil fungsi email di webhook:", emailErr);
           }

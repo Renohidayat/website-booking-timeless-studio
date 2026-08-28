@@ -44,10 +44,10 @@ export async function POST(request) {
           paidAt: Date.now()
         });
 
-        // Kirim notifikasi email ke Admin
+        // Kirim notifikasi email ke Pelanggan
         try {
-          const { sendAdminNotification } = await import('@/lib/email');
-          await sendAdminNotification(bookingData);
+          const { sendCustomerNotification } = await import('@/lib/email');
+          await sendCustomerNotification(bookingData);
         } catch (emailErr) {
           console.error("Gagal memanggil fungsi email:", emailErr);
         }
