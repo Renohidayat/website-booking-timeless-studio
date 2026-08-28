@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, where, orderBy } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, orderBy, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase/config";
 
 export const dummyPackages = [
