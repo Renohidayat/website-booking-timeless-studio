@@ -54,9 +54,20 @@ export async function sendCustomerNotification(bookingData) {
                 <td style="padding: 8px 0; color: #52525b;">Jam Mulai:</td>
                 <td style="padding: 8px 0; font-weight: bold; text-align: right;">${bookingData.jamMulai || '-'}</td>
               </tr>
+              ${bookingData.addons && bookingData.addons.length > 0 ? `
               <tr>
-                <td style="padding: 8px 0; color: #52525b;">Total Dibayar:</td>
-                <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #16a34a;">${formatCurrency(bookingData.totalHarga || 0)}</td>
+                <td colspan="2" style="padding: 12px 0 4px 0; color: #52525b; border-top: 1px solid #eaeaea; font-size: 12px; text-transform: uppercase; font-weight: bold;">Layanan Tambahan (Add-ons):</td>
+              </tr>
+              ${bookingData.addons.map(addon => `
+              <tr>
+                <td style="padding: 4px 0; color: #52525b; font-size: 13px;">${addon.qty}x ${addon.namaLayanan}</td>
+                <td style="padding: 4px 0; text-align: right; font-size: 13px;">Rp ${(addon.hargaSatuan * addon.qty).toLocaleString('id-ID')}</td>
+              </tr>
+              `).join('')}
+              ` : ''}
+              <tr>
+                <td style="padding: 8px 0; color: #52525b; border-top: 1px solid #eaeaea;">Total Dibayar:</td>
+                <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #16a34a; border-top: 1px solid #eaeaea;">${formatCurrency(bookingData.totalHarga || 0)}</td>
               </tr>
             </table>
             
