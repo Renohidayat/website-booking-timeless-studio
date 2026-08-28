@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getPackages, getAdditionalServices, getSchedules, checkVoucherKode } from "@/lib/data";
 import { createBookingAction } from "@/app/admin/actions";
 import { useAuth } from "@/lib/auth-context";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 
 function BookingFlow() {
   const searchParams = useSearchParams();
@@ -61,13 +63,43 @@ function BookingFlow() {
     loadInitialData();
   }, [initialPaketId]);
 
-  useEffect(() => {
+  // Helper to refresh available slots
+  const refreshSchedules = useCallback(async () => {
     if (selectedDate) {
-      getSchedules(selectedDate).then(data => setSchedules(data.filter(s => s.statusSlot === "tersedia")));
+      const data = await getSchedules(selectedDate);
+      const available = data.filter(s => s.statusSlot === "tersedia");
+      setSchedules(available);
+      // If the currently selected schedule got booked by someone else, deselect it
+      if (selectedSchedule) {
+        const stillAvailable = available.find(s => s.id === selectedSchedule.id);
+        if (!stillAvailable) {
+          setSelectedSchedule(null);
+        }
+      }
     } else {
       setSchedules([]);
     }
-  }, [selectedDate]);
+  }, [selectedDate, selectedSchedule]);
+
+  // Initial fetch + real-time listener for bookings on the selected date
+  useEffect(() => {
+    if (!selectedDate) {
+      setSchedules([]);
+      return;
+    }
+
+    // Initial fetch
+    refreshSchedules();
+
+    // Listen for real-time changes to bookings on this date
+    const q = query(collection(db, "bookings"), where("tanggal", "==", selectedDate));
+    const unsub = onSnapshot(q, () => {
+      // When any booking on this date changes, re-fetch available slots
+      refreshSchedules();
+    });
+
+    return () => unsub();
+  }, [selectedDate, refreshSchedules]);
 
   if (loading || authLoading || !user) return <div className="flex h-screen items-center justify-center bg-studio-50"><div className="w-8 h-8 border-4 border-studio-900 border-t-transparent rounded-full animate-spin"></div></div>;
 
