@@ -4,7 +4,7 @@ Website booking modern yang dibangun khusus untuk **Timeless Self Photo Studio**
 
 Sistem ini sudah menangani seluruh *flow* bisnis studio secara otomatis: mulai dari pemilihan paket, pemilihan jadwal kosong, pembayaran otomatis (*payment gateway*), hingga pengiriman struk via email.
 
-## 🚀 Tech Stack Utama
+## Tech Stack Utama
 - **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
 - **Styling:** Tailwind CSS v4
 - **Database:** Firebase Firestore
@@ -12,13 +12,13 @@ Sistem ini sudah menangani seluruh *flow* bisnis studio secara otomatis: mulai d
 - **Email Service:** Nodemailer (via Gmail SMTP)
 - **Hosting (Rekomendasi):** Vercel
 
-## ✨ Fitur Kunci
+## Fitur Kunci
 - **Smart Booking System:** Mencegah *double-booking* (bentrok jadwal) secara *real-time* dengan memanipulasi slot ketersediaan di Firestore.
 - **Automated Payment Gateway:** Terintegrasi dengan RonzzPay untuk pembayaran otomatis (QRIS dinamis dan E-Wallet). Status lunas langsung di-update via Webhook & Polling.
 - **E-Ticket & Add-ons:** Pelanggan mendapatkan struk digital yang mencatat paket utama serta layanan tambahan (*add-ons*). Sistem otomatis mengirimkan struk ke email pelanggan.
 - **Admin Dashboard:** Panel *back-office* khusus untuk mengatur paket, layanan tambahan, mengunci jadwal, dan memantau transaksi.
 
-## 🛠 Instalasi & Pengembangan Lokal
+## Instalasi & Pengembangan Lokal
 
 1. **Clone repository ini**
    ```bash
@@ -55,7 +55,7 @@ Sistem ini sudah menangani seluruh *flow* bisnis studio secara otomatis: mulai d
    ```
    Buka `http://localhost:3000` di browser Anda.
 
-## 🚢 Panduan Deployment (Production)
+## Panduan Deployment (Production)
 
 Project ini **diwajibkan** untuk di-deploy ke **Vercel**. Hal ini dikarenakan Vercel menyediakan eksekusi *API Routes* (Node.js) secara gratis yang mutlak dibutuhkan untuk menerima *Webhook* dari *Payment Gateway* dan mengeksekusi pengiriman Email.
 
