@@ -87,6 +87,8 @@ export async function createPackageAction(data) {
     isPopular: data.isPopular || false
   });
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 export async function updatePackageAction(id, data) {
@@ -100,33 +102,43 @@ export async function updatePackageAction(id, data) {
     isPopular: data.isPopular || false
   });
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 export async function deletePackageAction(id) {
   await deleteDoc(doc(db, "packages", id));
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 // === ADDITIONAL SERVICES ===
 export async function createServiceAction(data) {
-  await addDoc(collection(db, "services"), {
+  await addDoc(collection(db, "additionalServices"), {
     namaLayanan: data.namaLayanan,
     hargaSatuan: Number(data.hargaSatuan)
   });
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 export async function updateServiceAction(id, data) {
-  await updateDoc(doc(db, "services", id), {
+  await updateDoc(doc(db, "additionalServices", id), {
     namaLayanan: data.namaLayanan,
     hargaSatuan: Number(data.hargaSatuan)
   });
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 export async function deleteServiceAction(id) {
-  await deleteDoc(doc(db, "services", id));
+  await deleteDoc(doc(db, "additionalServices", id));
   revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  revalidatePath("/booking");
 }
 
 // === VOUCHERS ===
